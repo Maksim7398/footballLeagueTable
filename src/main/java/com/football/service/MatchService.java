@@ -1,6 +1,5 @@
 package com.football.service;
 
-import com.football.persist.entity.LeagueTable;
 import com.football.persist.entity.Match;
 import com.football.persist.entity.Team;
 
@@ -25,14 +24,14 @@ public class MatchService {
 
     private final Map<String, Map<LocalDateTime, List<Team>>> result;
 
+    private final CreateTableLeague createTableLeague;
 
-    public LeagueTable createMatch(final UUID team1, final UUID team2) throws InterruptedException {
+    public Map<String, List<Team>> createMatch(final UUID team1, final UUID team2) throws InterruptedException {
         final Team zenit = teamRepository.findById(team1).get();
         final Team spartak = teamRepository.findById(team2).get();
 
         final Match match1 = new Match();
         match1.result(zenit, spartak, (int) (Math.random() * 10), (int) (Math.random() * 10));
-        Thread.sleep(10000);
         final Match match2 = new Match();
         match2.result(spartak, zenit, (int) (Math.random() * 10), (int) (Math.random() * 10));
 
@@ -44,25 +43,24 @@ public class MatchService {
                 )
         );
 
-
-        LeagueTable leagueTable = new LeagueTable();
-        leagueTable.setTeamList(collect);
-
         teamRepository.saveAll(List.of(zenit, spartak));
         matchRepository.saveAll(matchList);
         CheckedPersonalMeeting.comparePoints(matchList, spartak, zenit);
-        return leagueTable;
+
+        return collect;
     }
 
-    public Map<String, Map<LocalDateTime, List<Team>>> result() {
-
-        final Map<String, Map<LocalDateTime, List<Team>>> collect = matchRepository.findAll().stream()
+    public Map<String, Map<LocalDateTime, List<Team>>> result(LocalDateTime localDate) {
+        final Map<String, Map<LocalDateTime, List<Team>>> collect2 =
+                matchRepository.findAll().stream()
+                        .filter(m -> m.getDateMatch().isBefore(localDate))
                 .collect(Collectors.toMap(
                                 m -> m.getAwayGoals() + ":" + m.getHomeGoals(),
-                                c -> Map.of(c.getDate_match(), List.of(c.getAwayTeam(), c.getHomeTeam()))
+                                c -> Map.of(c.getDateMatch(), List.of(c.getAwayTeam(), c.getHomeTeam()))
                         )
                 );
-        result.putAll(collect);
+        result.putAll(collect2);
+        createTableLeague.createTable(result);
         return result;
     }
 
