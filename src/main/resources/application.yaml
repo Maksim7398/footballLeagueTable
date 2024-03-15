@@ -1,0 +1,18 @@
+server:
+  servlet:
+    context-path: /my-app
+  port: 8080
+spring:
+  application:
+    name: football
+
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432}/${DATABASE_NAME:football}
+    username: ${DATABASE_USERNAME:user}
+    driver-class-name: org.postgresql.Driver
+    password: ${DATABASE_PASSWORD:user}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
