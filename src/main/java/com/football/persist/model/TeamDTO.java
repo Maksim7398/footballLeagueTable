@@ -2,6 +2,7 @@ package com.football.persist.model;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.lang.Nullable;
 
 import java.util.UUID;
 
@@ -10,10 +11,12 @@ import java.util.UUID;
 public class TeamDTO {
 
     private UUID id;
-
+    @Nullable
     private String name;
 
-    private Integer points = 0;
+    private Integer points;
+
+    private Integer otherPoints;
 
     private int totalGoals;
 

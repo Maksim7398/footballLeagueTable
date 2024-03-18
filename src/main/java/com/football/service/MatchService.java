@@ -1,5 +1,6 @@
 package com.football.service;
 
+import com.football.exception.TeamNotFoundException;
 import com.football.persist.entity.Match;
 import com.football.persist.entity.Team;
 
@@ -28,8 +29,10 @@ public class MatchService {
     private final CreateTableLeague createTableLeague;
     @Transactional
     public Map<String, List<Team>> createGame(final UUID team1id, final UUID team2id) {
-        final Team team1 = teamRepository.findById(team1id).get();
-        final Team team2 = teamRepository.findById(team2id).get();
+        final Team team1 = teamRepository.findById(team1id)
+                .orElseThrow(() -> new TeamNotFoundException("Такой команды не существует"));
+        final Team team2 = teamRepository.findById(team2id)
+                .orElseThrow(() -> new TeamNotFoundException("Такой команды не существует"));
 
         matchRepository.findAll().forEach(m -> {
             if (m.getHomeTeam().equals(team1) && m.getAwayTeam().equals(team2)){
@@ -61,6 +64,7 @@ public class MatchService {
         createTableLeague.createTableMatch(matches);
         return result;
     }
+
     public Match createMatch(Team team1,Team team2, int homeGoals, int awayGoals){
         final Match match = new Match();
         match.setAwayTeam(team1);
