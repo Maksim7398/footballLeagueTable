@@ -1,5 +1,6 @@
 package com.football.persist.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-@Table(name = "match")
+@Table(name = "matchs")
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,26 +43,4 @@ public class Match {
 
     @Column(name = "away_goals")
     private Integer awayGoals;
-
-    public void result(Team team1, Team team2, int homeGoals, int awayGoals){
-        this.setAwayTeam(team1);
-        this.setHomeTeam(team2);
-        this.setDateMatch(LocalDateTime.now());
-        this.setHomeGoals(homeGoals);
-        this.setAwayGoals(awayGoals);
-        if (homeGoals < awayGoals){
-            team1.setCountPoints(3);
-        }
-        if (homeGoals > awayGoals) {
-            team2.setCountPoints(3);
-        }
-        if(homeGoals == awayGoals) {
-            team1.setCountPoints(1);
-            team2.setCountPoints(1);
-        }
-        team2.setScipGoals(awayGoals);
-        team1.setScipGoals(homeGoals);
-        team2.setTotalGoals(homeGoals);
-        team1.setTotalGoals(awayGoals);
-    }
 }

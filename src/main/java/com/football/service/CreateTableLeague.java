@@ -1,5 +1,6 @@
 package com.football.service;
 
+import com.football.persist.entity.Match;
 import com.football.persist.entity.Team;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -7,52 +8,79 @@ import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
 
 @Component
 @RequiredArgsConstructor
 public class CreateTableLeague {
 
-    public void createTable(Map<String, Map<LocalDateTime, List<Team>>> result) {
-        File file = new File("src/main/resources/table.docx");
-        try (FileInputStream fis = new FileInputStream(file.getAbsolutePath())) {
-            XWPFDocument doc = new XWPFDocument();
+    public void createTableMatch(final List<Match> matchList) {
+        try (final XWPFDocument doc = new XWPFDocument();
+             final FileOutputStream fileOutputStream =
+                     new FileOutputStream(
+                             "src/main/resources/result/" + (int) (Math.random() * 10) + " table.docx"
+                     )) {
+
             XWPFTable table = doc.createTable();
             XWPFTableRow tableRow1 = table.getRow(0);
-            tableRow1.getCell(0).setText("ID");
-            tableRow1.addNewTableCell().setText("КОМАНДА");
-            tableRow1.addNewTableCell().setText("ПРОПУЩЕННЫЕ ГОЛЛЫ");
-            tableRow1.addNewTableCell().setText("ЗАБИТЫЕ ГОЛЛЫ");
-            tableRow1.addNewTableCell().setText("КОЛИЧЕСТВО ОЧКОВ");
-            tableRow1.addNewTableCell().setText("СЧЁТ");
 
-            result.forEach((key, value) -> value.values().forEach(t -> {
-                new HashSet<>(t).forEach(v -> {
-                    XWPFTableRow tableRow2 = table.createRow();
-                    tableRow2.getCell(0).setText(String.valueOf(v.getId()));
-                    tableRow2.getCell(1).setText(v.getName());
-                    tableRow2.getCell(2).setText(String.valueOf(v.getScipGoals()));
-                    tableRow2.getCell(3).setText(String.valueOf(v.getTotalGoals()));
-                    tableRow2.getCell(4).setText(String.valueOf(v.getPoints()));
-                    tableRow2.getCell(5).setText(key);
-                });
-            }));
 
-            doc.write(new FileOutputStream("src/main/resources/" + (int) (Math.random() * 10) + " table.docx"));
+            tableRow1.getCell(0).setText("Дата матча ");
+            tableRow1.addNewTableCell().setText("КОМАНДА1 ");
+            tableRow1.addNewTableCell().setText("ГОЛЫ ");
+            tableRow1.addNewTableCell().setText("ГОЛЫ ");
+            tableRow1.addNewTableCell().setText("КОМАНДА2 ");
+            tableRow1.addNewTableCell().setText("СЧЁТ ");
 
-            doc.close();
+            matchList.forEach(t -> {
+                XWPFTableRow tableRow2 = table.createRow();
+                DateTimeFormatter formatter =
+                        DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.forLanguageTag("ru"));
+                tableRow2.getCell(0).setText(t.getDateMatch().format(formatter));
+                tableRow2.getCell(1).setText(t.getHomeTeam().getName());
+                tableRow2.getCell(2).setText(String.valueOf(t.getHomeGoals()));
+                tableRow2.getCell(3).setText(String.valueOf(t.getAwayGoals()));
+                tableRow2.getCell(4).setText(t.getAwayTeam().getName());
+                tableRow2.getCell(5).setText(t.getHomeGoals() + ":" + t.getAwayGoals());
+            });
+            doc.write(fileOutputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    public void getStandings(final List<Team> teams) {
+        try (final XWPFDocument doc = new XWPFDocument();
+             final FileOutputStream fileOutputStream =
+                     new FileOutputStream(
+                             "src/main/resources/result/standings" + (int) (Math.random() * 10) + " table.docx"
+                     )) {
 
+            XWPFTable table = doc.createTable();
+            XWPFTableRow tableRow1 = table.getRow(0);
+            tableRow1.getCell(0).setText("КОМАНДА");
+            tableRow1.addNewTableCell().setText("ПРОПУЩЕННЫЕ ГОЛЛЫ");
+            tableRow1.addNewTableCell().setText("ЗАБИТЫЕ ГОЛЛЫ");
+            tableRow1.addNewTableCell().setText("КОЛИЧЕСТВО ИГР");
+            tableRow1.addNewTableCell().setText("КОЛИЧЕСТВО ОЧКОВ");
+
+            teams.stream().sorted(Comparator.reverseOrder()).forEach(v -> {
+                XWPFTableRow tableRow2 = table.createRow();
+                tableRow2.getCell(0).setText(v.getName());
+                tableRow2.getCell(1).setText(String.valueOf(v.getScipGoals()));
+                tableRow2.getCell(2).setText(String.valueOf(v.getTotalGoals()));
+                tableRow2.getCell(3).setText(String.valueOf(v.getNumberOfGames()));
+                tableRow2.getCell(4).setText(String.valueOf(v.getPoints()));
+            });
+            doc.write(fileOutputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Table(name = "team")
+@Table(name = "teams")
 @Entity
 @Data
 @NoArgsConstructor
@@ -27,11 +27,15 @@ public class Team implements Comparable<Team>{
     @Column(name = "name")
     private String name;
     @Column(name = "points")
-    private Integer points = 0;
+    private Integer points;
+    @Column(name = "other_points")
+    private Integer otherPoints;
     @Column(name = "total_goals")
     private int totalGoals;
     @Column(name = "scip_goals")
     private int scipGoals;
+    @Column(name = "number_of_games")
+    private int numberOfGames;
 
     public void setTotalGoals(int totalGoals) {
         this.totalGoals += totalGoals;
@@ -45,8 +49,17 @@ public class Team implements Comparable<Team>{
         this.scipGoals += scipGoals;
     }
 
+    public void setNumberOfGames(int numberOfGames) {
+        this.numberOfGames += numberOfGames;
+    }
+
+    public void setOtherPoints(Integer otherPoints) {
+        this.otherPoints += otherPoints;
+    }
+
     @Override
     public int compareTo(Team o) {
-        return this.getPoints().compareTo(o.getPoints());
+        return this.getOtherPoints().compareTo(o.getOtherPoints());
     }
+
 }

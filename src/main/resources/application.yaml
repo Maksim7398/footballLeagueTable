@@ -13,6 +13,10 @@ spring:
     password: ${DATABASE_PASSWORD:user}
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+    open-in-view: true
+  liquibase:
+    enabled: false
+    change-log: db/changelog/db.changelog-master.xml

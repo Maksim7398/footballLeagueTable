@@ -12,9 +12,9 @@ public class CheckedPersonalMeeting {
             List<Integer> list1 = matchList.stream().filter(m -> m.getAwayTeam().equals(o2))
                     .map(Match::getAwayGoals).toList();
             if (list.get(0) > list1.get(0)) {
-                o1.setCountPoints(1);
+                o1.setOtherPoints(1);
             } else {
-                o2.setCountPoints(1);
+                o2.setOtherPoints(1);
             }
         }
     }
