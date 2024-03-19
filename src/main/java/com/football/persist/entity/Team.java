@@ -34,7 +34,7 @@ public class Team implements Comparable<Team>{
     private Integer otherPoints;
 
     @Column(name = "total_goals")
-    private int totalGoals;
+    private Integer totalGoals;
 
     @Column(name = "scip_goals")
     private int scipGoals;
@@ -64,6 +64,14 @@ public class Team implements Comparable<Team>{
 
     @Override
     public int compareTo(Team o) {
-        return this.getOtherPoints().compareTo(o.getOtherPoints());
+        if (this.getOtherPoints().equals(o.getOtherPoints()) && this.getPoints().equals(o.getPoints())){
+            return this.getTotalGoals().compareTo(o.getTotalGoals());
+        }
+        if (this.getPoints().equals(o.getPoints())){
+            return this.getOtherPoints().compareTo(o.getOtherPoints());
+        }
+        else {
+            return this.getPoints().compareTo(o.getPoints());
+        }
     }
 }

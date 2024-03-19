@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,7 +68,7 @@ public class CreateTableLeague {
             tableRow1.addNewTableCell().setText("КОЛИЧЕСТВО ИГР");
             tableRow1.addNewTableCell().setText("КОЛИЧЕСТВО ОЧКОВ");
 
-            teams.stream().sorted(Comparator.reverseOrder()).forEach(v -> {
+            teams.forEach((v) -> {
                 XWPFTableRow tableRow2 = table.createRow();
                 tableRow2.getCell(0).setText(v.getName());
                 tableRow2.getCell(1).setText(String.valueOf(v.getScipGoals()));
@@ -77,10 +76,12 @@ public class CreateTableLeague {
                 tableRow2.getCell(3).setText(String.valueOf(v.getNumberOfGames()));
                 tableRow2.getCell(4).setText(String.valueOf(v.getPoints()));
             });
+
             doc.write(fileOutputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 }
 

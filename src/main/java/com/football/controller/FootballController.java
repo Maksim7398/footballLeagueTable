@@ -26,12 +26,22 @@ public class FootballController {
        return matchService.createGame(team1,team2);
     }
 
-    @GetMapping("/result")
-    public   List<Match> result (@RequestHeader @Nullable String localDateTime){
+    @GetMapping("/teamTable")
+    public  List<Team> getTeamsTable (){
+        return matchService.getTeamsTable();
+    }
+
+    @GetMapping("/matchesResult")
+    public  List<Match> getMatchesResult (@RequestHeader @Nullable String localDateTime){
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         if (localDateTime == null){
             localDateTime = LocalDateTime.now().format(formatter);
         }
-        return matchService.result(LocalDateTime.parse(localDateTime, formatter));
+        return matchService.getMatchesResult(LocalDateTime.parse(localDateTime, formatter));
+    }
+
+    @GetMapping("/globalGame")
+    public void createGlobalGame(){
+        matchService.globalGame();
     }
 }
