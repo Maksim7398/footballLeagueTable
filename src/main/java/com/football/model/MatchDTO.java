@@ -1,5 +1,6 @@
 package com.football.model;
 
+import com.football.persist.entity.TeamEntity;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,9 +13,9 @@ public class MatchDTO {
 
     private UUID id;
 
-    private TeamDTO homeTeamEntity;
+    private TeamEntity homeTeamEntity;
 
-    private TeamDTO awayTeamEntity;
+    private TeamEntity awayTeamEntity;
 
     private LocalDateTime dateMatch;
 

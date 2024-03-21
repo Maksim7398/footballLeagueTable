@@ -24,8 +24,8 @@ spring:
     show-sql: true
     open-in-view: true
   liquibase:
-    enabled: false
+    enabled: true
     change-log: db/changelog/db.changelog-master.xml
 app:
   kafka:
-    enabled: false
+    enabled: true

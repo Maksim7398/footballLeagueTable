@@ -2,7 +2,8 @@ package com.football.controller;
 
 import com.football.controller.response.GetResponseMatch;
 import com.football.controller.response.GetResponseTeam;
-import com.football.mapper.MatchMapperImp;
+
+import com.football.mapper.MatchMapper;
 import com.football.mapper.TeamMapper;
 import com.football.persist.entity.TeamEntity;
 import com.football.service.match.MatchService;
@@ -26,7 +27,7 @@ public class FootballController {
 
     private final MatchService matchService;
 
-    private final MatchMapperImp matchMapper;
+    private final MatchMapper matchMapper;
 
     private final TeamMapper teamMapper;
 
@@ -50,7 +51,7 @@ public class FootballController {
         }
 
         return matchMapper
-                .convertMatchDtoToResponse(matchService
+                .convertMatchDtoToResponseList(matchService
                         .getMatchesResult(LocalDateTime.parse(localDateTime, formatter))
                 );
     }

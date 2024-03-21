@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class GetResponseMatch {
+
     @JsonFormat(locale = "ru", pattern = "dd MMMM yyyy")
     private LocalDateTime dateMatch;
 

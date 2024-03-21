@@ -7,6 +7,7 @@ import com.football.persist.entity.MatchEntity;
 import com.football.persist.entity.TeamEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -26,23 +27,29 @@ public class Producer {
 
     private final KafkaTemplate<String, String> kafkaTemplateStringMatch;
 
-    public void sendCreateTableMatch(final String key, List<MatchEntity> matchEntityList, final String topic) throws JsonProcessingException, ExecutionException, InterruptedException {
+    @Value("${spring.kafka.topic2}")
+    private String TEAM_TOPIC;
+
+    @Value("${spring.kafka.topic}")
+    private String MATCH_TOPIC;
+
+    public void sendCreateTableMatch(final String key, List<MatchEntity> matchEntityList) throws JsonProcessingException, ExecutionException, InterruptedException {
         final ObjectMapper objectMapper = JsonMapper.builder()
                 .findAndAddModules()
                 .build();
         String data = objectMapper.writeValueAsString(matchEntityList);
-        final CompletableFuture<SendResult<String, String>> send = kafkaTemplateStringMatch.send(topic, key, data);
+        final CompletableFuture<SendResult<String, String>> send = kafkaTemplateStringMatch.send(MATCH_TOPIC, key, data);
 
         log.info("KEY: {}", key);
         log.info("TOPIC: {}", send.get().getRecordMetadata().topic());
     }
 
-    public void sendCreateTableTeam(final String key, final String topic, List<TeamEntity> teamEntityList) throws JsonProcessingException, ExecutionException, InterruptedException {
+    public void sendCreateTableTeam(final String key, List<TeamEntity> teamEntityList) throws JsonProcessingException, ExecutionException, InterruptedException {
         final ObjectMapper objectMapper = JsonMapper.builder()
                 .findAndAddModules()
                 .build();
         final String data = objectMapper.writeValueAsString(teamEntityList);
-        final CompletableFuture<SendResult<String, String>> send = kafkaTemplateStringTeam.send(topic, key, data);
+        final CompletableFuture<SendResult<String, String>> send = kafkaTemplateStringTeam.send(TEAM_TOPIC, key, data);
 
         log.info("KEY: {}", key);
         log.info("TOPIC: {}", send.get().getRecordMetadata().topic());

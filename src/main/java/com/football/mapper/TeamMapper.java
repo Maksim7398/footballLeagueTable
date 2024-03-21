@@ -10,8 +10,9 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface TeamMapper {
-
     GetResponseTeam convertDtoToResponse(TeamDTO teamDTO);
+
+    GetResponseTeam convertEntityToResponseTeam(TeamEntity teamEntity);
 
     List<GetResponseTeam> convertDtoToResponseList(List<TeamDTO> teamDTOList);
 
@@ -20,6 +21,8 @@ public interface TeamMapper {
     TeamDTO convertEntityToDto(TeamEntity teamEntity);
 
     List<TeamDTO>  convertEntityToDtoList(List<TeamEntity> teamEntityList);
+
+    List<TeamEntity>  convertDtoToEntityList(List<TeamDTO> teamEntityList);
 
     TeamDTO convertCreateTeamFromDto(CreateTeamRequest createTeamRequest);
 }
