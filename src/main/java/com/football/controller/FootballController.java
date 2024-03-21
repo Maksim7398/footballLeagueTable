@@ -1,8 +1,13 @@
 package com.football.controller;
-import com.football.persist.entity.Match;
-import com.football.persist.entity.Team;
-import com.football.service.MatchService;
+
+import com.football.controller.response.GetResponseMatch;
+import com.football.controller.response.GetResponseTeam;
+import com.football.mapper.MatchMapperImp;
+import com.football.mapper.TeamMapper;
+import com.football.persist.entity.TeamEntity;
+import com.football.service.match.MatchService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -21,27 +26,37 @@ public class FootballController {
 
     private final MatchService matchService;
 
+    private final MatchMapperImp matchMapper;
+
+    private final TeamMapper teamMapper;
+
     @GetMapping("/match")
-    public Map<String, List<Team>> createMatch(@RequestParam UUID team1,@RequestParam UUID team2){
-       return matchService.createGame(team1,team2);
+    public Map<String, List<TeamEntity>> createMatch(@RequestParam UUID team1, @RequestParam UUID team2) {
+        return matchService.createGame(team1, team2);
     }
 
     @GetMapping("/teamTable")
-    public  List<Team> getTeamsTable (){
-        return matchService.getTeamsTable();
+    @SneakyThrows
+    public List<GetResponseTeam> getTeamsTable() {
+        return teamMapper.convertDtoToResponseList(matchService.getTeamsTable());
     }
 
     @GetMapping("/matchesResult")
-    public  List<Match> getMatchesResult (@RequestHeader @Nullable String localDateTime){
+    @SneakyThrows
+    public List<GetResponseMatch> getMatchesResult(@RequestHeader @Nullable String localDateTime) {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        if (localDateTime == null){
+        if (localDateTime == null) {
             localDateTime = LocalDateTime.now().format(formatter);
         }
-        return matchService.getMatchesResult(LocalDateTime.parse(localDateTime, formatter));
+
+        return matchMapper
+                .convertMatchDtoToResponse(matchService
+                        .getMatchesResult(LocalDateTime.parse(localDateTime, formatter))
+                );
     }
 
     @GetMapping("/globalGame")
-    public void createGlobalGame(){
+    public void createGlobalGame() {
         matchService.globalGame();
     }
 }

@@ -1,4 +1,4 @@
-package com.football.persist.model;
+package com.football.model;
 
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +17,8 @@ public class TeamDTO {
     private Integer points;
 
     private Integer otherPoints;
+
+    private int numberOfGames;
 
     private int totalGoals;
 

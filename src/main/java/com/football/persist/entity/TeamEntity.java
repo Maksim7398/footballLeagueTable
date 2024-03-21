@@ -19,7 +19,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Team implements Comparable<Team>{
+public class TeamEntity implements Comparable<TeamEntity>{
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -63,7 +64,7 @@ public class Team implements Comparable<Team>{
     }
 
     @Override
-    public int compareTo(Team o) {
+    public int compareTo(TeamEntity o) {
         if (this.getOtherPoints().equals(o.getOtherPoints()) && this.getPoints().equals(o.getPoints())){
             return this.getTotalGoals().compareTo(o.getTotalGoals());
         }

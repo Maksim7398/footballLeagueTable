@@ -1,7 +1,7 @@
 package com.football.service;
 
-import com.football.persist.entity.Match;
-import com.football.persist.entity.Team;
+import com.football.persist.entity.MatchEntity;
+import com.football.persist.entity.TeamEntity;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
@@ -18,7 +18,7 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class CreateTableLeague {
 
-    public void createTableMatch(final List<Match> matchList) {
+    public void createTableMatch(final List<MatchEntity> matchEntityList) {
         try (final XWPFDocument doc = new XWPFDocument();
              final FileOutputStream fileOutputStream =
                      new FileOutputStream(
@@ -36,15 +36,15 @@ public class CreateTableLeague {
             tableRow1.addNewTableCell().setText("КОМАНДА2 ");
             tableRow1.addNewTableCell().setText("СЧЁТ ");
 
-            matchList.forEach(t -> {
+            matchEntityList.forEach(t -> {
                 XWPFTableRow tableRow2 = table.createRow();
                 DateTimeFormatter formatter =
                         DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.forLanguageTag("ru"));
                 tableRow2.getCell(0).setText(t.getDateMatch().format(formatter));
-                tableRow2.getCell(1).setText(t.getHomeTeam().getName());
+                tableRow2.getCell(1).setText(t.getHomeTeamEntity().getName());
                 tableRow2.getCell(2).setText(String.valueOf(t.getHomeGoals()));
                 tableRow2.getCell(3).setText(String.valueOf(t.getAwayGoals()));
-                tableRow2.getCell(4).setText(t.getAwayTeam().getName());
+                tableRow2.getCell(4).setText(t.getAwayTeamEntity().getName());
                 tableRow2.getCell(5).setText(t.getHomeGoals() + ":" + t.getAwayGoals());
             });
             doc.write(fileOutputStream);
@@ -53,7 +53,7 @@ public class CreateTableLeague {
         }
     }
 
-    public void getStandings(final List<Team> teams) {
+    public void createTableLeague(final List<TeamEntity> teamEntities) {
         try (final XWPFDocument doc = new XWPFDocument();
              final FileOutputStream fileOutputStream =
                      new FileOutputStream(
@@ -68,7 +68,7 @@ public class CreateTableLeague {
             tableRow1.addNewTableCell().setText("КОЛИЧЕСТВО ИГР");
             tableRow1.addNewTableCell().setText("КОЛИЧЕСТВО ОЧКОВ");
 
-            teams.forEach((v) -> {
+            teamEntities.forEach((v) -> {
                 XWPFTableRow tableRow2 = table.createRow();
                 tableRow2.getCell(0).setText(v.getName());
                 tableRow2.getCell(1).setText(String.valueOf(v.getScipGoals()));
@@ -81,7 +81,6 @@ public class CreateTableLeague {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 }
 

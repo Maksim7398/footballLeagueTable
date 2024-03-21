@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,9 +19,10 @@ import java.util.UUID;
 @Data
 @Table(name = "match")
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Match {
+public class MatchEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,11 +30,11 @@ public class Match {
 
     @ManyToOne
     @JoinColumn(name = "home_team")
-    private Team homeTeam;
+    private TeamEntity homeTeamEntity;
 
     @ManyToOne
     @JoinColumn(name = "away_team")
-    private Team awayTeam;
+    private TeamEntity awayTeamEntity;
 
     @Column(name = "time")
     private LocalDateTime dateMatch;

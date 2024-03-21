@@ -3,29 +3,25 @@ server:
     context-path: /my-app
   port: 8080
 spring:
-  kafka:
-    bootstrapAddress: localhost:9090
-    groupId: group1
-    groupId2: group2
-    topic: match_topic
-    topic2: team_topic
   application:
     name: football
 
+  sql:
+    init:
+      data-locations: classpath:/team-test.sql
+      mode: always
+
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432}/${DATABASE_NAME:football}
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432}/${DATABASE_NAME:football-test}
     username: ${DATABASE_USERNAME:user}
     driver-class-name: org.postgresql.Driver
     password: ${DATABASE_PASSWORD:user}
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     open-in-view: true
   liquibase:
     enabled: false
     change-log: db/changelog/db.changelog-master.xml
-app:
-  kafka:
-    enabled: false

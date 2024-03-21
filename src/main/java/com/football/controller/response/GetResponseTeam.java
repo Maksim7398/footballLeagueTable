@@ -7,15 +7,13 @@ import lombok.Data;
 @Builder
 public class GetResponseTeam {
 
-    private Integer placeInTheRanking;
-
     private String name;
 
-    private Integer points;
-
-    private Integer totalGoals;
+    private int numberOfGames;
 
     private int scipGoals;
 
-    private int numberOfGames;
+    private Integer totalGoals;
+
+    private Integer points;
 }

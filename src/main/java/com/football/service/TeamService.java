@@ -2,8 +2,8 @@ package com.football.service;
 
 import com.football.controller.request.CreateTeamRequest;
 import com.football.mapper.TeamMapper;
-import com.football.persist.entity.Team;
-import com.football.persist.model.TeamDTO;
+import com.football.persist.entity.TeamEntity;
+import com.football.model.TeamDTO;
 import com.football.persist.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class TeamService {
         final TeamDTO teamDTO = teamMapper.convertCreateTeamFromDto(createTeamRequest);
         teamDTO.setOtherPoints(0);
         teamDTO.setPoints(0);
-        final Team save = teamRepository.save(teamMapper.converDtoFromTeam(teamDTO));
+        final TeamEntity save = teamRepository.save(teamMapper.converDtoFromTeam(teamDTO));
 
         return save.getId();
     }
