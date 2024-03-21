@@ -67,6 +67,7 @@ public class CreateTableLeague {
             tableRow1.addNewTableCell().setText("ЗАБИТЫЕ ГОЛЛЫ");
             tableRow1.addNewTableCell().setText("КОЛИЧЕСТВО ИГР");
             tableRow1.addNewTableCell().setText("КОЛИЧЕСТВО ОЧКОВ");
+            tableRow1.addNewTableCell().setText("МЕСТО");
 
             teamEntities.forEach((v) -> {
                 XWPFTableRow tableRow2 = table.createRow();
@@ -75,6 +76,7 @@ public class CreateTableLeague {
                 tableRow2.getCell(2).setText(String.valueOf(v.getTotalGoals()));
                 tableRow2.getCell(3).setText(String.valueOf(v.getNumberOfGames()));
                 tableRow2.getCell(4).setText(String.valueOf(v.getPoints()));
+                tableRow2.getCell(5).setText(String.valueOf(teamEntities.indexOf(v) + 1));
             });
 
             doc.write(fileOutputStream);
