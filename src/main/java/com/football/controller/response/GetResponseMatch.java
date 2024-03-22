@@ -12,9 +12,9 @@ public class GetResponseMatch {
     @JsonFormat(locale = "ru", pattern = "dd MMMM yyyy")
     private LocalDateTime dateMatch;
 
-    private GetResponseTeam homeTeam;
+    private GetResponseTeamForMatch homeTeam;
 
-    private GetResponseTeam awayTeam;
+    private GetResponseTeamForMatch awayTeam;
 
     private Integer homeGoals;
 

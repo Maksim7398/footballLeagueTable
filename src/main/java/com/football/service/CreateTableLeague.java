@@ -1,7 +1,7 @@
 package com.football.service;
 
-import com.football.persist.entity.MatchEntity;
-import com.football.persist.entity.TeamEntity;
+import com.football.controller.response.GetResponseMatch;
+import com.football.controller.response.GetResponseTeam;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
@@ -18,7 +18,7 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class CreateTableLeague {
 
-    public void createTableMatch(final List<MatchEntity> matchEntityList) {
+    public void createTableMatch(final List<GetResponseMatch> matchEntityList) {
         try (final XWPFDocument doc = new XWPFDocument();
              final FileOutputStream fileOutputStream =
                      new FileOutputStream(
@@ -34,18 +34,16 @@ public class CreateTableLeague {
             tableRow1.addNewTableCell().setText("ГОЛЫ ");
             tableRow1.addNewTableCell().setText("ГОЛЫ ");
             tableRow1.addNewTableCell().setText("КОМАНДА2 ");
-            tableRow1.addNewTableCell().setText("СЧЁТ ");
 
             matchEntityList.forEach(t -> {
                 XWPFTableRow tableRow2 = table.createRow();
                 DateTimeFormatter formatter =
                         DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.forLanguageTag("ru"));
                 tableRow2.getCell(0).setText(t.getDateMatch().format(formatter));
-                tableRow2.getCell(1).setText(t.getHomeTeamEntity().getName());
+                tableRow2.getCell(1).setText(t.getHomeTeam().getName());
                 tableRow2.getCell(2).setText(String.valueOf(t.getHomeGoals()));
                 tableRow2.getCell(3).setText(String.valueOf(t.getAwayGoals()));
-                tableRow2.getCell(4).setText(t.getAwayTeamEntity().getName());
-                tableRow2.getCell(5).setText(t.getHomeGoals() + ":" + t.getAwayGoals());
+                tableRow2.getCell(4).setText(t.getAwayTeam().getName());
             });
             doc.write(fileOutputStream);
         } catch (IOException e) {
@@ -53,7 +51,7 @@ public class CreateTableLeague {
         }
     }
 
-    public void createTableLeague(final List<TeamEntity> teamEntities) {
+    public void createTableLeague(final List<GetResponseTeam> teamEntities) {
         try (final XWPFDocument doc = new XWPFDocument();
              final FileOutputStream fileOutputStream =
                      new FileOutputStream(

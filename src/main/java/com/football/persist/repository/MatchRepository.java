@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface MatchRepository extends JpaRepository<MatchEntity, UUID> {
 
     @Query("from MatchEntity m " +
-            "left join fetch m.awayTeamEntity " +
-            "left join fetch m.homeTeamEntity")
+            "left join fetch m.awayTeam " +
+            "left join fetch m.homeTeam")
     List<MatchEntity> findAllByFetch();
 }

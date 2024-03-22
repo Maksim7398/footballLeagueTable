@@ -22,7 +22,7 @@ public class TeamService {
         final TeamDTO teamDTO = teamMapper.convertCreateTeamFromDto(createTeamRequest);
         teamDTO.setOtherPoints(0);
         teamDTO.setPoints(0);
-        final TeamEntity save = teamRepository.save(teamMapper.converDtoFromTeam(teamDTO));
+        final TeamEntity save = teamRepository.save(teamMapper.convertDtoFromTeam(teamDTO));
 
         return save.getId();
     }

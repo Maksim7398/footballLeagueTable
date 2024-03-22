@@ -1,7 +1,7 @@
 package com.football.mapper;
 
 import com.football.controller.response.GetResponseMatch;
-import com.football.controller.response.GetResponseTeam;
+import com.football.controller.response.GetResponseTeamForMatch;
 import com.football.persist.entity.MatchEntity;
 import com.football.model.MatchDTO;
 import com.football.persist.entity.TeamEntity;
@@ -13,26 +13,28 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface MatchMapper {
 
-    default GetResponseTeam convertEntityToResponseTeam(TeamEntity teamEntity) {
+    default GetResponseTeamForMatch convertEntityToResponseTeam(TeamEntity teamEntity) {
         return Mappers.getMapper(TeamMapper.class).convertEntityToResponseTeam(teamEntity);
     }
 
-    default GetResponseMatch convertMatchEntityToResponse(MatchEntity matchEntity) {
+    default MatchDTO convertEntityToDto(MatchEntity matchEntity) {
         if (matchEntity == null) {
             return null;
-        } else {
-            GetResponseMatch.GetResponseMatchBuilder getResponseMatch = GetResponseMatch.builder();
-            getResponseMatch.awayTeam(convertEntityToResponseTeam(matchEntity.getAwayTeamEntity()));
-            getResponseMatch.homeTeam(convertEntityToResponseTeam(matchEntity.getHomeTeamEntity()));
-            getResponseMatch.dateMatch(matchEntity.getDateMatch());
-            getResponseMatch.homeGoals(matchEntity.getHomeGoals());
-            getResponseMatch.awayGoals(matchEntity.getAwayGoals());
-            return getResponseMatch.build();
         }
+
+        MatchDTO.MatchDTOBuilder matchDTO = MatchDTO.builder();
+
+        matchDTO.id(matchEntity.getId());
+        matchDTO.homeTeamEntity(matchEntity.getHomeTeam());
+        matchDTO.awayTeamEntity(matchEntity.getAwayTeam());
+        matchDTO.dateMatch(matchEntity.getDateMatch());
+        matchDTO.homeGoals(matchEntity.getHomeGoals());
+        matchDTO.awayGoals(matchEntity.getAwayGoals());
+
+        return matchDTO.build();
     }
 
     List<GetResponseMatch> convertMatchDtoToResponseList(List<MatchDTO> matchDTO);
-
 
     List<MatchDTO> convertMatchEntityToDto(List<MatchEntity> matchEntity);
 

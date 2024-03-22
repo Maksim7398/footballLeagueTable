@@ -43,26 +43,6 @@ public class TeamEntity implements Comparable<TeamEntity>{
     @Column(name = "number_of_games")
     private int numberOfGames;
 
-    public void setTotalGoals(int totalGoals) {
-        this.totalGoals += totalGoals;
-    }
-
-    public void setCountPoints(Integer countPoints) {
-        this.points += countPoints;
-    }
-
-    public void setScipGoals(int scipGoals) {
-        this.scipGoals += scipGoals;
-    }
-
-    public void setNumberOfGames(int numberOfGames) {
-        this.numberOfGames += numberOfGames;
-    }
-
-    public void setOtherPoints(Integer otherPoints) {
-        this.otherPoints += otherPoints;
-    }
-
     @Override
     public int compareTo(TeamEntity o) {
         if (this.getOtherPoints().equals(o.getOtherPoints()) && this.getPoints().equals(o.getPoints())){

@@ -3,8 +3,8 @@ package com.football.kafka;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.football.persist.entity.MatchEntity;
-import com.football.persist.entity.TeamEntity;
+import com.football.controller.response.GetResponseMatch;
+import com.football.controller.response.GetResponseTeam;
 import com.football.service.CreateTableLeague;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +30,8 @@ public class Consumer {
                 .findAndAddModules()
                 .build();
         try {
-            final List<MatchEntity> matchEntities =
-                    objectMapper.readValue(message, new TypeReference<List<MatchEntity>>(){});
+            final List<GetResponseMatch> matchEntities =
+                    objectMapper.readValue(message, new TypeReference<List<GetResponseMatch>>(){});
 
             createTableLeague.createTableMatch(matchEntities);
         } catch (IOException e) {
@@ -45,8 +45,8 @@ public class Consumer {
                 .findAndAddModules()
                 .build();
         try {
-            final List<TeamEntity> teamEntities =
-                    objectMapper.readValue(message, new TypeReference<List<TeamEntity>>(){});
+            final List<GetResponseTeam> teamEntities =
+                    objectMapper.readValue(message, new TypeReference<List<GetResponseTeam>>(){});
 
             createTableLeague.createTableLeague(teamEntities);
         } catch (IOException e) {

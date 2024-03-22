@@ -22,7 +22,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MatchEntity {
+public class MatchEntity implements Comparable<MatchEntity> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -30,11 +30,11 @@ public class MatchEntity {
 
     @ManyToOne
     @JoinColumn(name = "home_team")
-    private TeamEntity homeTeamEntity;
+    private TeamEntity homeTeam;
 
     @ManyToOne
     @JoinColumn(name = "away_team")
-    private TeamEntity awayTeamEntity;
+    private TeamEntity awayTeam;
 
     @Column(name = "time")
     private LocalDateTime dateMatch;
@@ -44,4 +44,9 @@ public class MatchEntity {
 
     @Column(name = "away_goals")
     private Integer awayGoals;
+
+    @Override
+    public int compareTo(MatchEntity o) {
+        return this.dateMatch.compareTo(o.dateMatch);
+    }
 }

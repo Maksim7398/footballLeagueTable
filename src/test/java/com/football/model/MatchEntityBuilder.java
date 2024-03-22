@@ -72,8 +72,8 @@ public class MatchEntityBuilder {
     public MatchEntity build() {
         return MatchEntity.builder()
                 .id(id)
-                .homeTeamEntity(homeTeamEntity)
-                .awayTeamEntity(awayTeamEntity)
+                .homeTeam(homeTeamEntity)
+                .awayTeam(awayTeamEntity)
                 .dateMatch(dateMatch)
                 .homeGoals(homeGoals)
                 .awayGoals(awayGoals)
