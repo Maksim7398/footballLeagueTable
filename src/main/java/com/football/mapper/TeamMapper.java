@@ -21,9 +21,9 @@ public interface TeamMapper {
 
     TeamDTO convertEntityToDto(TeamEntity teamEntity);
 
-    List<TeamDTO>  convertEntityToDtoList(List<TeamEntity> teamEntityList);
+    List<TeamDTO> convertEntityToDtoList(List<TeamEntity> teamEntityList);
 
-    List<TeamEntity>  convertDtoToEntityList(List<TeamDTO> teamEntityList);
+    List<TeamEntity> convertDtoToEntityList(List<TeamDTO> teamEntityList);
 
     TeamDTO convertCreateTeamFromDto(CreateTeamRequest createTeamRequest);
 }

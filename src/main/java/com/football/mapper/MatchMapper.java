@@ -8,6 +8,7 @@ import com.football.persist.entity.TeamEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -45,7 +46,7 @@ public interface MatchMapper {
             GetResponseMatch.GetResponseMatchBuilder getResponseMatch = GetResponseMatch.builder();
             getResponseMatch.awayTeam(convertEntityToResponseTeam(matchDTO.getAwayTeamEntity()));
             getResponseMatch.homeTeam(convertEntityToResponseTeam(matchDTO.getHomeTeamEntity()));
-            getResponseMatch.dateMatch(matchDTO.getDateMatch());
+            getResponseMatch.dateMatch(LocalDate.from(matchDTO.getDateMatch()));
             getResponseMatch.homeGoals(matchDTO.getHomeGoals());
             getResponseMatch.awayGoals(matchDTO.getAwayGoals());
             return getResponseMatch.build();

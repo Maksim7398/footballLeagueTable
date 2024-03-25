@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -24,14 +23,15 @@ public class Consumer {
 
     private final CreateTableLeague createTableLeague;
 
-    @KafkaListener(topics = "match_topic", containerFactory = "kafkaListenerContainerFactoryString")
-    public void createTableMatch(String message) {
+    @KafkaListener(topics = "match_topic", containerFactory = "kafkaListenerContainerFactoryByteArrayForMatch")
+    public void createTableMatch(byte[] message) {
         final ObjectMapper objectMapper = JsonMapper.builder()
                 .findAndAddModules()
                 .build();
         try {
             final List<GetResponseMatch> matchEntities =
-                    objectMapper.readValue(message, new TypeReference<List<GetResponseMatch>>(){});
+                    objectMapper.readValue(message, new TypeReference<List<GetResponseMatch>>() {
+                    });
 
             createTableLeague.createTableMatch(matchEntities);
         } catch (IOException e) {
@@ -39,14 +39,15 @@ public class Consumer {
         }
     }
 
-    @KafkaListener(topics = "team_topic", containerFactory = "kafkaListenerContainerFactoryString")
+    @KafkaListener(topics = "team_topic", containerFactory = "kafkaListenerContainerFactoryStringForTeam")
     public void setCreateTableLeague(String message) {
         final ObjectMapper objectMapper = JsonMapper.builder()
                 .findAndAddModules()
                 .build();
         try {
             final List<GetResponseTeam> teamEntities =
-                    objectMapper.readValue(message, new TypeReference<List<GetResponseTeam>>(){});
+                    objectMapper.readValue(message, new TypeReference<List<GetResponseTeam>>() {
+                    });
 
             createTableLeague.createTableLeague(teamEntities);
         } catch (IOException e) {

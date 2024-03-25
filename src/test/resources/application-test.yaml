@@ -6,11 +6,6 @@ spring:
   application:
     name: football
 
-  sql:
-    init:
-      data-locations: classpath:/team-test.sql
-      mode: never
-
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432}/${DATABASE_NAME:football-test}
     username: ${DATABASE_USERNAME:user}
@@ -18,10 +13,19 @@ spring:
     password: ${DATABASE_PASSWORD:user}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     open-in-view: true
+    defer-datasource-initialization: true
   liquibase:
     enabled: false
     change-log: db/changelog/db.changelog-master.xml
+
+  sql:
+    init:
+      data-locations: classpath:/team-test.sql
+      mode: always
+app:
+  kafka:
+    enabled: false

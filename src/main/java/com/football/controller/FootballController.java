@@ -5,7 +5,7 @@ import com.football.controller.response.GetResponseTeam;
 
 import com.football.mapper.MatchMapper;
 import com.football.mapper.TeamMapper;
-import com.football.service.match.MatchServiceImpl;
+import com.football.service.match.FootballServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.lang.Nullable;
@@ -23,13 +23,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FootballController {
 
-    private final MatchServiceImpl matchService;
+    private final FootballServiceImpl matchService;
 
     private final MatchMapper matchMapper;
 
     private final TeamMapper teamMapper;
 
-    @PostMapping("/match")
+    @PostMapping("/createMatch")
     public GetResponseMatch createMatch(@RequestParam String homeGoals,
                                         @RequestParam String awayGoals,
                                         @RequestParam UUID homeTeam,
@@ -47,7 +47,7 @@ public class FootballController {
 
         return teamMapper
                 .convertDtoToResponseList(
-                        matchService.createResultTeam(LocalDateTime.parse(localDateTime, formatter))
+                        matchService.createResultTeamTable(LocalDateTime.parse(localDateTime, formatter))
                 );
 
     }

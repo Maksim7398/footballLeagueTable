@@ -1,5 +1,6 @@
 package com.football.service.match;
 
+import com.football.exception.MatchExceptions;
 import com.football.exception.TeamNotFoundException;
 import com.football.mapper.MatchMapper;
 import com.football.mapper.TeamMapper;
@@ -22,7 +23,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class MatchServiceImpl {
+public class FootballServiceImpl {
 
     private final MatchRepository matchRepository;
 
@@ -41,17 +42,17 @@ public class MatchServiceImpl {
 
         matchRepository.findAllByFetch().forEach(m -> {
             if (m.getHomeTeam().equals(teamEntity1) && m.getAwayTeam().equals(teamEntity2)) {
-                throw new RuntimeException("Эти команды уже соревновались");
+                throw new MatchExceptions("Эти команды уже соревновались");
             }
         });
 
-        final MatchEntity matchEntity = createResultTeam(teamEntity1,teamEntity2,homeGoals,awayGoals);
+        final MatchEntity matchEntity = createResultTeam(teamEntity1, teamEntity2, homeGoals, awayGoals);
         matchRepository.save(matchEntity);
 
         return matchMapper.convertEntityToDto(matchEntity);
     }
 
-    public List<TeamDTO> createResultTeam(LocalDateTime localDate) {
+    public List<TeamDTO> createResultTeamTable(final LocalDateTime localDate) {
         final List<MatchEntity> matchEntities = matchRepository.findAllByFetch();
         final List<TeamEntity> teamEntities = teamRepository.findAll();
         teamEntities.forEach(t -> {
@@ -61,12 +62,14 @@ public class MatchServiceImpl {
             t.setNumberOfGames(0);
             t.setScipGoals(0);
         });
-        matchEntities.stream().filter(m -> m.getDateMatch().isBefore(localDate)).forEach(m -> {
-            createTableTeam(m.getHomeTeam(), m.getAwayTeam(), m.getHomeGoals(), m.getAwayGoals());
-            if (m.getHomeTeam().getPoints().equals(m.getAwayTeam().getPoints())) {
-                CheckedPersonalMeeting.comparePoints(matchEntities, m.getHomeTeam(), m.getAwayTeam());
-            }
-        });
+        matchEntities.stream()
+                .filter(m -> m.getDateMatch().isBefore(localDate)).
+                forEach(m -> {
+                    createTableTeam(m.getHomeTeam(), m.getAwayTeam(), m.getHomeGoals(), m.getAwayGoals());
+                    if (m.getHomeTeam().getPoints().equals(m.getAwayTeam().getPoints())) {
+                        CheckedPersonalMeeting.comparePoints(matchEntities, m.getHomeTeam(), m.getAwayTeam());
+                    }
+                });
 
         return teamMapper.convertEntityToDtoList(teamEntities.stream()
                 .sorted(Comparator.reverseOrder())
@@ -82,7 +85,7 @@ public class MatchServiceImpl {
         return matchMapper.convertMatchEntityToDto(matchEntities);
     }
 
-    private void createTableTeam(TeamEntity homeTeam, TeamEntity awayTeam, int homeGoals, int awayGoals){
+    private void createTableTeam(final TeamEntity homeTeam, final TeamEntity awayTeam, int homeGoals, int awayGoals) {
         if (homeGoals > awayGoals) {
             homeTeam.setPoints(homeTeam.getPoints() + 3);
             homeTeam.setOtherPoints(homeTeam.getOtherPoints() + 3);
@@ -105,13 +108,14 @@ public class MatchServiceImpl {
         homeTeam.setTotalGoals(homeTeam.getTotalGoals() + homeGoals);
     }
 
-    private MatchEntity createResultTeam(TeamEntity homeTeam, TeamEntity awayTeam, int homeGoals, int awayGoals) {
+    private MatchEntity createResultTeam(final TeamEntity homeTeam, final TeamEntity awayTeam, int homeGoals, int awayGoals) {
         final MatchEntity matchEntity = new MatchEntity();
         matchEntity.setHomeTeam(homeTeam);
         matchEntity.setAwayTeam(awayTeam);
         matchEntity.setDateMatch(LocalDateTime.now());
         matchEntity.setHomeGoals(homeGoals);
         matchEntity.setAwayGoals(awayGoals);
+
         return matchEntity;
     }
 }

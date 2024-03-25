@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -22,7 +23,7 @@ public class CreateTableLeague {
         try (final XWPFDocument doc = new XWPFDocument();
              final FileOutputStream fileOutputStream =
                      new FileOutputStream(
-                             "src/main/resources/result/" + (int) (Math.random() * 10) + " table.docx"
+                             "src/main/resources/result/" + LocalDate.now() + " matchTable.docx"
                      )) {
 
             XWPFTable table = doc.createTable();
@@ -39,7 +40,7 @@ public class CreateTableLeague {
                 XWPFTableRow tableRow2 = table.createRow();
                 DateTimeFormatter formatter =
                         DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.forLanguageTag("ru"));
-                tableRow2.getCell(0).setText(t.getDateMatch().format(formatter));
+                tableRow2.getCell(0).setText(t.getDateMatch().toString());
                 tableRow2.getCell(1).setText(t.getHomeTeam().getName());
                 tableRow2.getCell(2).setText(String.valueOf(t.getHomeGoals()));
                 tableRow2.getCell(3).setText(String.valueOf(t.getAwayGoals()));
@@ -55,7 +56,7 @@ public class CreateTableLeague {
         try (final XWPFDocument doc = new XWPFDocument();
              final FileOutputStream fileOutputStream =
                      new FileOutputStream(
-                             "src/main/resources/result/standings" + (int) (Math.random() * 10) + " table.docx"
+                             "src/main/resources/result/standings" + LocalDate.now() + " table.docx"
                      )) {
 
             XWPFTable table = doc.createTable();

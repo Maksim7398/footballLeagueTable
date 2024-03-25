@@ -30,6 +30,6 @@ public class TeamRepositoryTest {
         final List<TeamEntity> teamEntities = teamRepository.findAll();
         assertNotNull(teamEntities);
 
-        assertEquals(teamEntities.size(), 20);
+        assertEquals(teamEntities.size(), 22);
     }
 }
