@@ -55,6 +55,9 @@ public class FootballServiceImpl {
     public List<TeamDTO> createResultTeamTable(final LocalDateTime localDate) {
         final List<MatchEntity> matchEntities = matchRepository.findAllByFetch();
         final List<TeamEntity> teamEntities = teamRepository.findAll();
+        if (teamEntities.isEmpty()){
+            throw new TeamNotFoundException("Ни одной команды не зарегестрировано");
+        }
         teamEntities.forEach(t -> {
             t.setTotalGoals(0);
             t.setPoints(0);
@@ -81,6 +84,10 @@ public class FootballServiceImpl {
                 .sorted()
                 .filter(m -> m.getDateMatch().isBefore(localDate))
                 .toList();
+
+        if (matchEntities.isEmpty()){
+            throw new MatchExceptions("Ни одного матча не было проведено");
+        }
 
         return matchMapper.convertMatchEntityToDto(matchEntities);
     }
