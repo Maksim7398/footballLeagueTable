@@ -34,7 +34,10 @@ public class Consumer {
                     });
 
             createTableLeague.createTableMatch(matchEntities);
+
+            log.info("MESSAGE READING: " + matchEntities);
         } catch (IOException e) {
+            log.error("CONSUMER MATCH NOT READING MESSAGE: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -50,7 +53,10 @@ public class Consumer {
                     });
 
             createTableLeague.createTableLeague(teamEntities);
+
+            log.info("MESSAGE READING: " + teamEntities);
         } catch (IOException e) {
+            log.error("CONSUMER TEAM NOT READING MESSAGE: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

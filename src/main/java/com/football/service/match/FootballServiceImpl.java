@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,10 +33,10 @@ public class FootballServiceImpl {
     private final TeamMapper teamMapper;
 
     @Transactional
-    public MatchDTO createGame(final UUID team1id, final UUID team2id, final Integer homeGoals, final Integer awayGoals) {
-        final TeamEntity teamEntity1 = teamRepository.findById(team1id)
+    public MatchDTO createGame(final String homeTeam, final String awayTeam, final Integer homeGoals, final Integer awayGoals) {
+        final TeamEntity teamEntity1 = teamRepository.findTeamEntityByName(homeTeam)
                 .orElseThrow(() -> new TeamNotFoundException("Такой команды не существует"));
-        final TeamEntity teamEntity2 = teamRepository.findById(team2id)
+        final TeamEntity teamEntity2 = teamRepository.findTeamEntityByName(awayTeam)
                 .orElseThrow(() -> new TeamNotFoundException("Такой команды не существует"));
 
         matchRepository.findAllByFetch().forEach(m -> {
@@ -55,7 +54,7 @@ public class FootballServiceImpl {
     public List<TeamDTO> createResultTeamTable(final LocalDateTime localDate) {
         final List<MatchEntity> matchEntities = matchRepository.findAllByFetch();
         final List<TeamEntity> teamEntities = teamRepository.findAll();
-        if (teamEntities.isEmpty()){
+        if (teamEntities.isEmpty()) {
             throw new TeamNotFoundException("Ни одной команды не зарегестрировано");
         }
         teamEntities.forEach(t -> {
@@ -85,7 +84,7 @@ public class FootballServiceImpl {
                 .filter(m -> m.getDateMatch().isBefore(localDate))
                 .toList();
 
-        if (matchEntities.isEmpty()){
+        if (matchEntities.isEmpty()) {
             throw new MatchExceptions("Ни одного матча не было проведено");
         }
 

@@ -52,10 +52,10 @@ public class FootballServiceImplTest {
                 .withId(UUID.randomUUID())
                 .withName("Spartak").build();
 
-        when(teamRepositoryMock.findById(team1.getId())).thenReturn(Optional.of(team1));
-        when(teamRepositoryMock.findById(team2.getId())).thenReturn(Optional.of(team2));
+        when(teamRepositoryMock.findTeamEntityByName(team1.getName())).thenReturn(Optional.of(team1));
+        when(teamRepositoryMock.findTeamEntityByName(team2.getName())).thenReturn(Optional.of(team2));
 
-        underTest.createGame(team1.getId(), team2.getId(), 2, 1);
+        underTest.createGame(team1.getName(), team2.getName(), 2, 1);
 
         ArgumentCaptor<MatchEntity> captor = ArgumentCaptor.forClass(MatchEntity.class);
 
@@ -76,13 +76,13 @@ public class FootballServiceImplTest {
                 .aMatchEntityBuilder()
                 .withDateMatch(LocalDateTime.now()).build();
 
-        when(teamRepositoryMock.findById(any())).thenReturn(Optional.of(expected.getHomeTeam()));
-        when(teamRepositoryMock.findById(any())).thenReturn(Optional.of(expected.getAwayTeam()));
+        when(teamRepositoryMock.findTeamEntityByName(any())).thenReturn(Optional.of(expected.getHomeTeam()));
+        when(teamRepositoryMock.findTeamEntityByName(any())).thenReturn(Optional.of(expected.getAwayTeam()));
         when(matchRepositoryMock.findAllByFetch()).thenReturn(List.of(expected));
 
         assertThrows(MatchExceptions.class,
                 () -> underTest.createGame(
-                        expected.getHomeTeam().getId(), expected.getAwayTeam().getId(), 2, 1)
+                        expected.getHomeTeam().getName(), expected.getAwayTeam().getName(), 2, 1)
         );
     }
 
