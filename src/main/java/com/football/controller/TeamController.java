@@ -2,6 +2,7 @@ package com.football.controller;
 
 import com.football.controller.request.CreateTeamRequest;
 import com.football.service.TeamService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +17,7 @@ public class TeamController {
     private final TeamService teamService;
 
     @PostMapping("/createTeam")
-    public UUID createTeam(@RequestBody CreateTeamRequest createTeamRequest){
+    public UUID createTeam(@RequestBody @Valid CreateTeamRequest createTeamRequest){
         return teamService.createTeam(createTeamRequest);
     }
 }

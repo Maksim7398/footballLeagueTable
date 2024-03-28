@@ -19,34 +19,40 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Team implements Comparable<Team>{
+public class TeamEntity implements Comparable<TeamEntity>{
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "name")
     private String name;
+
     @Column(name = "points")
-    private Integer points = 0;
+    private Integer points;
+
+    @Column(name = "other_points")
+    private Integer otherPoints;
+
     @Column(name = "total_goals")
-    private int totalGoals;
+    private Integer totalGoals;
+
     @Column(name = "scip_goals")
     private int scipGoals;
 
-    public void setTotalGoals(int totalGoals) {
-        this.totalGoals += totalGoals;
-    }
-
-    public void setCountPoints(Integer countPoints) {
-        this.points += countPoints;
-    }
-
-    public void setScipGoals(int scipGoals) {
-        this.scipGoals += scipGoals;
-    }
+    @Column(name = "number_of_games")
+    private int numberOfGames;
 
     @Override
-    public int compareTo(Team o) {
-        return this.getPoints().compareTo(o.getPoints());
+    public int compareTo(TeamEntity o) {
+        if (this.getOtherPoints().equals(o.getOtherPoints()) && this.getPoints().equals(o.getPoints())){
+            return this.getTotalGoals().compareTo(o.getTotalGoals());
+        }
+        if (this.getPoints().equals(o.getPoints())){
+            return this.getOtherPoints().compareTo(o.getOtherPoints());
+        }
+        else {
+            return this.getPoints().compareTo(o.getPoints());
+        }
     }
 }
