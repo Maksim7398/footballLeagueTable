@@ -16,7 +16,7 @@ public class TeamController {
 
     private final TeamService teamService;
 
-    @PostMapping("/createTeam")
+    @PostMapping("/team")
     public UUID createTeam(@RequestBody @Valid CreateTeamRequest createTeamRequest){
         return teamService.createTeam(createTeamRequest);
     }

@@ -28,7 +28,6 @@ public class MatchRepositoryTest {
     @Autowired
     private  TeamRepository teamRepository;
 
-
     @Test
     void checkCreateTable(){
         final List<TeamEntity> teamEntities = teamRepository.findAll();

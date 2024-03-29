@@ -29,6 +29,9 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.groupId}")
     private String GROUP_ID_FOR_MATCH;
 
+    @Value("${spring.kafka.groupId3")
+    private String GROUP_ID_FOR_MATCH_RESULT;
+
     private ConsumerFactory<String, String> consumerFactoryStringForTeam() {
         Map<String, Object> props = new HashMap<>();
         props.put(
@@ -80,6 +83,33 @@ public class KafkaConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<String, byte[]> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactoryStringForMatch());
+        return factory;
+    }
+
+    private ConsumerFactory<String, String> consumerFactoryStringForResultMatch() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(
+                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                SERVER);
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(
+                ConsumerConfig.GROUP_ID_CONFIG,
+                GROUP_ID_FOR_MATCH_RESULT);
+        props.put(
+                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+                StringDeserializer.class);
+        props.put(
+                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+                StringDeserializer.class);
+
+        return new DefaultKafkaConsumerFactory<>(props);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactoryStringForMatchResult() {
+        ConcurrentKafkaListenerContainerFactory<String, String> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactoryStringForResultMatch());
         return factory;
     }
 }

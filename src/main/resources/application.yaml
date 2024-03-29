@@ -7,9 +7,11 @@ spring:
     bootstrapAddress: localhost:9090
     groupId: group1
     groupId2: group2
+    groupId3: group3
     topic: match_topic
     topic2: team_topic
-  application:
+    topic3: match_result_topic
+    application:
     name: football
 
   datasource:

@@ -26,6 +26,3 @@ spring:
     init:
       data-locations: classpath:/team-test.sql
       mode: always
-app:
-  kafka:
-    enabled: false
