@@ -20,9 +20,7 @@ import java.util.concurrent.ExecutionException;
 @ConditionalOnProperty(prefix = "app", name = "kafka.enabled", matchIfMissing = false)
 public class TestProducer {
 
-
     private final KafkaTemplate<String, String> kafkaTemplateStringMatchResult;
-
 
     @Value("${spring.kafka.topic3}")
     private String MATCH_RESULT_TOPIC;

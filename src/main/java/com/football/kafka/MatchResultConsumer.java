@@ -3,7 +3,6 @@ package com.football.kafka;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.football.controller.request.CreateMatchRequest;
-import com.football.model.MatchDTO;
 import com.football.service.match.FootballServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
