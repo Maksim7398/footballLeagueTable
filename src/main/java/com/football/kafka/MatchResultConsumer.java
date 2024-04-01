@@ -3,7 +3,7 @@ package com.football.kafka;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.football.controller.request.CreateMatchRequest;
-import com.football.service.match.FootballServiceImpl;
+import com.football.service.match.MatchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -18,7 +18,7 @@ import java.io.IOException;
 @ConditionalOnProperty(prefix = "app", name = "kafka.enabled", matchIfMissing = false)
 public class MatchResultConsumer {
 
-    private final FootballServiceImpl footballService;
+    private final MatchService footballService;
 
     @KafkaListener(topics = "match_result_topic", containerFactory = "kafkaListenerContainerFactoryStringForMatchResult")
     public void createMatchResult(String message) {

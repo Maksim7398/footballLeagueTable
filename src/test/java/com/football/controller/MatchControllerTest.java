@@ -19,7 +19,7 @@ import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class FootBallControllerTest {
+public class MatchControllerTest {
 
     @LocalServerPort
     private int port;
@@ -64,15 +64,15 @@ public class FootBallControllerTest {
     }
 
     @Test
-    public void getTeamsTable_test() {
+    public void getMatchTable_thenReturnOk_test() {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         RestAssured.given()
                 .baseUri("http://localhost:" + port + "/my-app")
+                .header("localDateTimeForMatches", LocalDateTime.now().format(formatter))
                 .contentType(ContentType.JSON)
                 .when()
-                .header("localDateTime", LocalDateTime.now().format(formatter))
-                .get("/team")
+                .get("/match")
                 .then()
                 .statusCode(200);
     }
