@@ -30,4 +30,4 @@ spring:
     change-log: db/changelog/db.changelog-master.xml
 app:
   kafka:
-    enabled: true
+    enabled: false

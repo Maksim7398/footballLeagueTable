@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@ConditionalOnProperty(prefix = "app", name = "kafka.enabled", matchIfMissing = false)
+@ConditionalOnProperty(prefix = "app", name = "kafka.enabled.test", matchIfMissing = false)
 public class TestProducer {
 
     private final KafkaTemplate<String, String> kafkaTemplateStringMatchResult;
@@ -35,5 +35,6 @@ public class TestProducer {
 
         log.info("KEY: {}", key);
         log.info("TOPIC: {}", send.get().getRecordMetadata().topic());
+        log.info("GET MESSAGE: " + data);
     }
 }

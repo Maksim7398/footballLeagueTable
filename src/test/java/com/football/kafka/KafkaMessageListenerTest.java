@@ -11,7 +11,6 @@ import lombok.SneakyThrows;
 import org.assertj.core.api.AssertionsForInterfaceTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -29,8 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Testcontainers
-@ActiveProfiles("test")
-@ConditionalOnProperty(prefix = "app", name = "kafka.enabled", matchIfMissing = false)
+@ActiveProfiles("kafka")
 public class KafkaMessageListenerTest {
 
     @Autowired

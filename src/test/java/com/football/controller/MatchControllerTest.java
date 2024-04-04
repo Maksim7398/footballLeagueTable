@@ -2,8 +2,11 @@ package com.football.controller;
 
 import com.football.controller.request.CreateMatchRequest;
 import com.football.model.CreateMatchRequestBuilder;
+import com.football.model.MatchEntityBuilder;
 import com.football.model.TeamEntityBuilder;
+import com.football.persist.entity.MatchEntity;
 import com.football.persist.entity.TeamEntity;
+import com.football.persist.repository.MatchRepository;
 import com.football.persist.repository.TeamRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -16,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -26,6 +30,9 @@ public class MatchControllerTest {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private MatchRepository matchRepository;
 
     @Test
     public void createMatch_returnTeamNotFoundException_test() {
@@ -42,9 +49,11 @@ public class MatchControllerTest {
 
     @Test
     public void createMatch_returnStatusOk_test() {
-        final TeamEntity team1 = TeamEntityBuilder.aTeamEntityBuilder().build();
+        final TeamEntity team1 = TeamEntityBuilder.aTeamEntityBuilder()
+                .withName("JAVA").build();
         final TeamEntity team2 = TeamEntityBuilder.aTeamEntityBuilder()
-                .withName("Spartak")
+                .withId(UUID.randomUUID())
+                .withName("SQL")
                 .build();
 
         final CreateMatchRequest createMatchRequest = CreateMatchRequestBuilder.aCreateMatchRequestBuilder()
@@ -66,10 +75,20 @@ public class MatchControllerTest {
     @Test
     public void getMatchTable_thenReturnOk_test() {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        final TeamEntity team1 = TeamEntityBuilder.aTeamEntityBuilder().build();
+        final TeamEntity team2 = TeamEntityBuilder.aTeamEntityBuilder()
+                .withName("Spartak")
+                .build();
+        final MatchEntity matchEntityStub = MatchEntityBuilder.aMatchEntityBuilder()
+                .withAwayTeam(team1)
+                .withHomeTeam(team2).build();
+
+        teamRepository.saveAll(List.of(team1, team2));
+        matchRepository.save(matchEntityStub);
 
         RestAssured.given()
                 .baseUri("http://localhost:" + port + "/my-app")
-                .header("localDateTimeForMatches", LocalDateTime.now().format(formatter))
+                .header("localDateTimeForMatches", LocalDateTime.now().plusDays(1).format(formatter))
                 .contentType(ContentType.JSON)
                 .when()
                 .get("/match")

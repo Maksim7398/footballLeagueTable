@@ -1,4 +1,4 @@
-package com.football.kafka.producer.config;
+package com.football.kafka.config;
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@ConditionalOnProperty(prefix = "app", name = "kafka.enabled", matchIfMissing = false)
+@ConditionalOnProperty(prefix = "app", name = "kafka.enabled.test", matchIfMissing = false)
 public class KafkaProducerConfiguration {
 
     @Value("${spring.kafka.bootstrapAddress}")

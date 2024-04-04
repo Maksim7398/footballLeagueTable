@@ -31,4 +31,4 @@ spring:
 app:
   kafka:
     enabled:
-      test: false
+      test: true

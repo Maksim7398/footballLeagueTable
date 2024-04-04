@@ -35,6 +35,6 @@ public class GlobalExceptionHandlerController {
     @ExceptionHandler
     public ResponseEntity<ErrorDetails> handleThisTeamAlreadyCompeted(MatchExceptions exception) {
         ErrorDetails errorDetails = new ErrorDetails(exception.getClass().getSimpleName(), exception.getMessage(), LocalDateTime.now());
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
