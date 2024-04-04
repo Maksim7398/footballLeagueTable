@@ -27,7 +27,7 @@ public class TeamService {
 
     private final TeamMapper teamMapper;
 
-    public UUID createTeam(final CreateTeamRequest createTeamRequest){
+    public UUID createTeam(final CreateTeamRequest createTeamRequest) {
         final TeamDTO teamDTO = teamMapper.convertCreateTeamFromDto(createTeamRequest);
         teamDTO.setOtherPoints(0);
         teamDTO.setPoints(0);
@@ -66,17 +66,13 @@ public class TeamService {
     private void createTableTeam(final TeamEntity homeTeam, final TeamEntity awayTeam, int homeGoals, int awayGoals) {
         if (homeGoals > awayGoals) {
             homeTeam.setPoints(homeTeam.getPoints() + 3);
-            homeTeam.setOtherPoints(homeTeam.getOtherPoints() + 3);
         }
         if (homeGoals < awayGoals) {
             awayTeam.setPoints(awayTeam.getPoints() + 3);
-            awayTeam.setOtherPoints(awayTeam.getOtherPoints() + 3);
         }
         if (homeGoals == awayGoals) {
             homeTeam.setPoints(homeTeam.getPoints() + 1);
             awayTeam.setPoints(awayTeam.getPoints() + 1);
-            homeTeam.setOtherPoints(homeTeam.getOtherPoints() + 1);
-            awayTeam.setOtherPoints(awayTeam.getOtherPoints() + 1);
         }
         homeTeam.setNumberOfGames(homeTeam.getNumberOfGames() + 1);
         awayTeam.setNumberOfGames(awayTeam.getNumberOfGames() + 1);

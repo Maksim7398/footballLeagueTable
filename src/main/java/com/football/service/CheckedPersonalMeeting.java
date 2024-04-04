@@ -15,6 +15,9 @@ public class CheckedPersonalMeeting {
                     .map(MatchEntity::getAwayGoals).toList();
             if (list.get(0) > list1.get(0)) {
                 o1.setOtherPoints(1);
+            }
+            if (list.get(0).equals(list1.get(0))) {
+                return;
             } else {
                 o2.setOtherPoints(1);
             }
