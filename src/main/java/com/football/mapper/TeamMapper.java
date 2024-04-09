@@ -3,8 +3,8 @@ package com.football.mapper;
 import com.football.controller.request.CreateTeamRequest;
 import com.football.controller.response.GetResponseTeam;
 import com.football.controller.response.GetResponseTeamForMatch;
-import com.football.persist.entity.TeamEntity;
 import com.football.model.TeamDTO;
+import com.football.persist.entity.TeamEntity;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -20,8 +20,6 @@ public interface TeamMapper {
     TeamEntity convertDtoFromTeam(TeamDTO teamDTO);
 
     TeamDTO convertEntityToDto(TeamEntity teamEntity);
-
-    List<TeamDTO> convertEntityToDtoList(List<TeamEntity> teamEntityList);
 
     List<TeamEntity> convertDtoToEntityList(List<TeamDTO> teamEntityList);
 

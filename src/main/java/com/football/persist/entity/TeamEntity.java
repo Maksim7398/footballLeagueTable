@@ -19,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TeamEntity implements Comparable<TeamEntity>{
+public class TeamEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,31 +28,10 @@ public class TeamEntity implements Comparable<TeamEntity>{
     @Column(name = "name")
     private String name;
 
-    @Column(name = "points")
-    private Integer points;
+    @Column(name = "country")
+    private String country;
 
-    @Column(name = "other_points")
-    private Integer otherPoints;
+    @Column(name = "city")
+    private String city;
 
-    @Column(name = "total_goals")
-    private Integer totalGoals;
-
-    @Column(name = "scip_goals")
-    private int scipGoals;
-
-    @Column(name = "number_of_games")
-    private int numberOfGames;
-
-    @Override
-    public int compareTo(TeamEntity o) {
-        if (this.getOtherPoints().equals(o.getOtherPoints()) && this.getPoints().equals(o.getPoints())){
-            return this.getTotalGoals().compareTo(o.getTotalGoals());
-        }
-        if (this.getPoints().equals(o.getPoints())){
-            return this.getOtherPoints().compareTo(o.getOtherPoints());
-        }
-        else {
-            return this.getPoints().compareTo(o.getPoints());
-        }
-    }
 }
