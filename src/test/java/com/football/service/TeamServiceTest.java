@@ -18,10 +18,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,8 +41,14 @@ public class TeamServiceTest {
 
     @Test
     public void checkedResultOfTeamOnSpecificDate_orCompareTotalGoals_test() {
-        final TeamEntity team1 = TeamEntityBuilder.aTeamEntityBuilder().withName("Zenit").build();
-        final TeamEntity team2 = TeamEntityBuilder.aTeamEntityBuilder().withName("Spartak").build();
+        final TeamEntity team1 = TeamEntityBuilder.aTeamEntityBuilder().
+                withId(UUID.randomUUID()).
+                withName("Zenit").build();
+
+        final TeamEntity team2 = TeamEntityBuilder.aTeamEntityBuilder().
+                withId(UUID.randomUUID())
+                .withName("Spartak").build();
+
         final MatchEntity matchEntity = MatchEntityBuilder.aMatchEntityBuilder()
                 .withAwayTeam(team1)
                 .withHomeTeam(team2)
@@ -60,25 +66,25 @@ public class TeamServiceTest {
         final TeamDTO teamDTO = TeamDtoBuilder.aTeamDtoBuilder()
                 .withId(team1.getId())
                 .withName(team1.getName())
+                .withNumberOfGames(0)
                 .build();
         final TeamDTO teamDTO2 = TeamDtoBuilder.aTeamDtoBuilder()
                 .withId(team2.getId())
                 .withName(team2.getName())
+                .withNumberOfGames(0)
                 .build();
 
-        when(matchRepositoryMock.findAllByFetch()).thenReturn(List.of(matchEntity2, matchEntity));
         when(teamRepositoryMock.findAll()).thenReturn(List.of(team1, team2));
+        when(matchRepositoryMock.findAllByFetch()).thenReturn(List.of(matchEntity, matchEntity2));
         when(teamMapperMock.convertEntityToDto(team1)).thenReturn(teamDTO);
-        when(matchRepositoryMock.findMatchByHomeTeam(any())).thenReturn(List.of(matchEntity));
         when(teamMapperMock.convertEntityToDto(team2)).thenReturn(teamDTO2);
-        when(matchRepositoryMock.findMatchByAwayTeam(any())).thenReturn(List.of(matchEntity2));
 
         List<TeamDTO> actual = underTest.createResultTeamTable(LocalDateTime.now().plusDays(2));
 
         assertEquals(teamDTO, actual.get(0));
         assertThat(actual)
                 .anySatisfy(t -> {
-                    assertEquals(t.getNumberOfGames(), 2);
+                    assertEquals(t.getNumberOfGames(), 4);
                 });
     }
 
@@ -109,15 +115,12 @@ public class TeamServiceTest {
                 .withName(team2.getName())
                 .build();
 
-        when(matchRepositoryMock.findAllByFetch()).thenReturn(List.of(matchEntity2, matchEntity));
+        when(matchRepositoryMock.findAllByFetch()).thenReturn(List.of(matchEntity, matchEntity2));
         when(teamRepositoryMock.findAll()).thenReturn(List.of(team1, team2));
         when(teamMapperMock.convertEntityToDto(team1)).thenReturn(teamDTO);
-        when(matchRepositoryMock.findMatchByHomeTeam(any())).thenReturn(List.of(matchEntity));
         when(teamMapperMock.convertEntityToDto(team2)).thenReturn(teamDTO2);
-        when(matchRepositoryMock.findMatchByAwayTeam(any())).thenReturn(List.of(matchEntity2));
 
         List<TeamDTO> actual = underTest.createResultTeamTable(LocalDateTime.now().plusDays(2));
-
         assertEquals(teamDTO, actual.get(0));
     }
 }

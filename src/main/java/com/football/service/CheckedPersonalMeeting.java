@@ -20,7 +20,6 @@ public class CheckedPersonalMeeting {
                             m.getAwayTeam().getId().equals(o1.getId())
                                     && m.getHomeTeam().getId().equals(o2.getId()))
                     .map(MatchEntity::getAwayGoals).toList();
-            System.out.println(matchEntityList);
             if (list.get(0) > list1.get(0)) {
                 o1.setOtherPoints(1);
             }

@@ -19,6 +19,12 @@ public class TeamDTO implements Comparable<TeamDTO> {
     @Nullable
     private String name;
 
+    @Nullable
+    private String country;
+
+    @Nullable
+    private String city;
+
     private int points;
 
     private int otherPoints;

@@ -30,8 +30,7 @@ public class TeamService {
     private final TeamMapper teamMapper;
 
     public UUID createTeam(final CreateTeamRequest createTeamRequest) {
-        final TeamDTO teamDTO = teamMapper.convertCreateTeamFromDto(createTeamRequest);
-        final TeamEntity save = teamRepository.save(teamMapper.convertDtoFromTeam(teamDTO));
+        final TeamEntity save = teamRepository.save(teamMapper.convertDtoFromTeam(createTeamRequest));
 
         return save.getId();
     }
@@ -48,33 +47,21 @@ public class TeamService {
         teamEntities.forEach(t -> {
             final TeamDTO teamDTO = teamMapper.convertEntityToDto(t);
 
-            matchRepository.findMatchByHomeTeam(t).stream()
+            matchRepositoryAllByFetch.stream()
+                    .filter(m -> m.getHomeTeam().equals(t))
                     .filter(m -> m.getDateMatch().isBefore(localDate))
                     .forEach(m -> {
                         TeamDTO awayTeam = teamMapper.convertEntityToDto(m.getAwayTeam());
-                        if (m.getHomeTeam().getName().equals(teamDTO.getName())) {
-                            createTableTeam(
-                                    teamDTO,
-                                    awayTeam,
-                                    m.getHomeGoals(),
-                                    m.getAwayGoals()
-                            );
-                        }
+                        createTableTeam(teamDTO, awayTeam, m.getHomeGoals(), m.getAwayGoals());
                         CheckedPersonalMeeting.comparePoints(matchRepositoryAllByFetch, teamDTO, awayTeam);
                     });
 
-            matchRepository.findMatchByAwayTeam(t).stream()
+            matchRepositoryAllByFetch.stream()
+                    .filter(m -> m.getAwayTeam().equals(t))
                     .filter(m -> m.getDateMatch().isBefore(localDate))
                     .forEach(m -> {
                         TeamDTO homeTeam = teamMapper.convertEntityToDto(m.getHomeTeam());
-                        if (m.getAwayTeam().getName().equals(teamDTO.getName())) {
-                            createTableTeam(
-                                    homeTeam,
-                                    teamDTO,
-                                    m.getHomeGoals(),
-                                    m.getAwayGoals()
-                            );
-                        }
+                        createTableTeam(homeTeam, teamDTO, m.getHomeGoals(), m.getAwayGoals());
                         CheckedPersonalMeeting.comparePoints(matchRepositoryAllByFetch, homeTeam, teamDTO);
                     });
 
