@@ -11,13 +11,14 @@ import com.football.persist.repository.TeamRepository;
 import com.football.service.CheckedPersonalMeeting;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,43 +36,41 @@ public class TeamService {
         return save.getId();
     }
 
+    @Transactional
     public List<TeamDTO> createResultTeamTable(final LocalDateTime localDate) {
+
         final List<TeamEntity> teamEntities = teamRepository.findAll();
-        final List<MatchEntity> matchRepositoryAllByFetch = matchRepository.findAllByFetch();
+        final List<MatchEntity> matchEntities = matchRepository.findAllByFetch();
 
         if (teamEntities.isEmpty()) {
             throw new TeamNotFoundException("Ни одной команды не зарегестрировано");
         }
-        final Set<TeamDTO> teamDTOS = new HashSet<>();
 
-        teamEntities.forEach(t -> {
-            final TeamDTO teamDTO = teamMapper.convertEntityToDto(t);
-
-            matchRepositoryAllByFetch.stream()
-                    .filter(m -> m.getHomeTeam().equals(t))
-                    .filter(m -> m.getDateMatch().isBefore(localDate))
-                    .forEach(m -> {
-                        TeamDTO awayTeam = teamMapper.convertEntityToDto(m.getAwayTeam());
-                        createTableTeam(teamDTO, awayTeam, m.getHomeGoals(), m.getAwayGoals());
-                        CheckedPersonalMeeting.comparePoints(matchRepositoryAllByFetch, teamDTO, awayTeam);
+        final Set<TeamDTO> teamDTOS = teamEntities.stream()
+                .map(t -> {
+                    final TeamDTO teamDTO = teamMapper.convertEntityToDto(t);
+                    matchEntities.stream().filter(m -> m.getDateMatch().isBefore(localDate)).forEach(m -> {
+                        if (m.getAwayTeam().equals(t)) {
+                            TeamDTO homeTeam = teamMapper.convertEntityToDto(m.getHomeTeam());
+                            createTableTeam(homeTeam, teamDTO, m.getHomeGoals(), m.getAwayGoals());
+                            CheckedPersonalMeeting.comparePoints(matchEntities, homeTeam, teamDTO);
+                        }
+                        if (m.getHomeTeam().equals(t)) {
+                            TeamDTO awayTeam = teamMapper.convertEntityToDto(m.getAwayTeam());
+                            createTableTeam(teamDTO, awayTeam, m.getHomeGoals(), m.getAwayGoals());
+                            CheckedPersonalMeeting.comparePoints(matchEntities, teamDTO, awayTeam);
+                        }
                     });
-
-            matchRepositoryAllByFetch.stream()
-                    .filter(m -> m.getAwayTeam().equals(t))
-                    .filter(m -> m.getDateMatch().isBefore(localDate))
-                    .forEach(m -> {
-                        TeamDTO homeTeam = teamMapper.convertEntityToDto(m.getHomeTeam());
-                        createTableTeam(homeTeam, teamDTO, m.getHomeGoals(), m.getAwayGoals());
-                        CheckedPersonalMeeting.comparePoints(matchRepositoryAllByFetch, homeTeam, teamDTO);
-                    });
-
-            teamDTOS.add(teamDTO);
-        });
+                    return teamDTO;
+                }).collect(Collectors.toSet());
 
         return teamDTOS.stream().sorted(Comparator.reverseOrder()).toList();
     }
 
-    private void createTableTeam(final TeamDTO homeTeam, final TeamDTO awayTeam, int homeGoals, int awayGoals) {
+    private void createTableTeam(final TeamDTO homeTeam,
+                                 final TeamDTO awayTeam,
+                                 int homeGoals,
+                                 int awayGoals) {
         if (homeGoals > awayGoals) {
             homeTeam.setPoints(homeTeam.getPoints() + 3);
         }
