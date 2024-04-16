@@ -9,4 +9,10 @@ import lombok.Data;
 public class CreateTeamRequest {
     @NotBlank(message = "name must not be blank")
     private String name;
+
+    @NotBlank(message = "country must not be blank")
+    private String country;
+
+    @NotBlank(message = "city must not be blank")
+    private String city;
 }
