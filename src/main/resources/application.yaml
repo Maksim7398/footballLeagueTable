@@ -3,7 +3,15 @@ server:
     context-path: /my-app
   port: 8080
 spring:
-  application:
+  kafka:
+    bootstrapAddress: localhost:9090
+    groupId: group1
+    groupId2: group2
+    groupId3: group3
+    topic: match_topic
+    topic2: team_topic
+    topic3: match_result_topic
+    application:
     name: football
 
   datasource:
@@ -13,6 +21,13 @@ spring:
     password: ${DATABASE_PASSWORD:user}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+    open-in-view: true
+  liquibase:
+    enabled: true
+    change-log: db/changelog/db.changelog-master.xml
+app:
+  kafka:
+    enabled: false
