@@ -28,7 +28,7 @@ public class MatchResultConsumer {
         try {
             final CreateMatchRequest teamEntities =
                     objectMapper.readValue(message, CreateMatchRequest.class);
-            footballService.createGame(teamEntities.getHomeTeam(), teamEntities.getAwayTeam(),
+            footballService.createGame(teamEntities.getTournamentName(),teamEntities.getHomeTeam(), teamEntities.getAwayTeam(),
                     teamEntities.getHomeGoals(), teamEntities.getAwayGoals());
             log.info("MESSAGE READING: " + teamEntities);
         } catch (IOException e) {

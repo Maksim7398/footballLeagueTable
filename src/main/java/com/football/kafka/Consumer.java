@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.football.controller.response.GetResponseMatch;
-import com.football.controller.response.GetResponseTeam;
-import com.football.service.CreateTableLeague;
+import com.football.controller.response.Standings;
+import com.football.service.document.CreateTableLeague;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -48,8 +48,8 @@ public class Consumer {
                 .findAndAddModules()
                 .build();
         try {
-            final List<GetResponseTeam> teamEntities =
-                    objectMapper.readValue(message, new TypeReference<List<GetResponseTeam>>() {
+            final List<Standings> teamEntities =
+                    objectMapper.readValue(message, new TypeReference<List<Standings>>() {
                     });
 
             createTableLeague.createTableLeague(teamEntities);

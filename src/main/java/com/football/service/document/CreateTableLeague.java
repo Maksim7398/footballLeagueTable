@@ -1,7 +1,7 @@
-package com.football.service;
+package com.football.service.document;
 
 import com.football.controller.response.GetResponseMatch;
-import com.football.controller.response.GetResponseTeam;
+import com.football.controller.response.Standings;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
@@ -54,7 +54,7 @@ public class CreateTableLeague {
         }
     }
 
-    public void createTableLeague(final List<GetResponseTeam> teamEntities) {
+    public void createTableLeague(final List<Standings> teamEntities) {
         try (final XWPFDocument doc = new XWPFDocument();
              final FileOutputStream fileOutputStream =
                      new FileOutputStream(

@@ -9,6 +9,9 @@ import lombok.Data;
 @Builder
 public class CreateMatchRequest {
 
+    @NotBlank(message = "tournamentName must not be blank")
+    private String tournamentName;
+
     @NotBlank(message = "home team must not be blank")
     private String homeTeam;
 

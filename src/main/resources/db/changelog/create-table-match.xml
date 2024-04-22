@@ -20,4 +20,12 @@
             <column name="home_goals" type="INTEGER"/>
         </createTable>
     </changeSet>
+    <changeSet author="Maksim7398" id="005-rename field time">
+        <renameColumn tableName="match" oldColumnName="time" newColumnName="date_match"/>
+    </changeSet>
+    <changeSet author="Maksim7398" id="007-add column tournament name">
+        <addColumn tableName="match">
+            <column name="tournament_name" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

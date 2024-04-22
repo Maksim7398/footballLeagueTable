@@ -1,6 +1,6 @@
 package com.football.model;
 
-import com.football.controller.response.GetResponseTeam;
+import com.football.controller.response.Standings;
 
 public class GetResponseTeamBuilder {
 
@@ -57,8 +57,8 @@ public class GetResponseTeamBuilder {
         return this;
     }
 
-    public GetResponseTeam build() {
-        return GetResponseTeam.builder()
+    public Standings build() {
+        return Standings.builder()
                 .name(name)
                 .points(points)
                 .totalGoals(totalGoals)

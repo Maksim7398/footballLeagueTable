@@ -4,6 +4,8 @@ import com.football.controller.request.CreateMatchRequest;
 
 public class CreateMatchRequestBuilder {
 
+    private final static String TOURNAMENT_NAME = "Russia";
+
     private final static String DEFAULT_HOME_TEAM = "VOLGA";
 
     private final static String DEFAULT_AWAY_TEAM = "ZENIT";
@@ -11,6 +13,8 @@ public class CreateMatchRequestBuilder {
     private final static Integer DEFAULT_HOME_GOALS = 2;
 
     private final static Integer DEFAULT_AWAY_GOALS = 2;
+
+    private String tournamentName = TOURNAMENT_NAME;
 
     private String homeTeam = DEFAULT_HOME_TEAM;
 
@@ -50,6 +54,7 @@ public class CreateMatchRequestBuilder {
 
     public CreateMatchRequest build() {
         return CreateMatchRequest.builder()
+                .tournamentName(tournamentName)
                 .homeTeam(homeTeam)
                 .homeGoals(homeGoals)
                 .awayTeam(awayTeam)

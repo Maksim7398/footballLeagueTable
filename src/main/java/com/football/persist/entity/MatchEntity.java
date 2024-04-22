@@ -36,7 +36,7 @@ public class MatchEntity implements Comparable<MatchEntity> {
     @JoinColumn(name = "away_team")
     private TeamEntity awayTeam;
 
-    @Column(name = "time")
+    @Column(name = "date_match")
     private LocalDateTime dateMatch;
 
     @Column(name = "home_goals")
@@ -44,6 +44,10 @@ public class MatchEntity implements Comparable<MatchEntity> {
 
     @Column(name = "away_goals")
     private Integer awayGoals;
+
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "id",name = "tournament_name")
+    private Tournament tournament;
 
     @Override
     public int compareTo(MatchEntity o) {

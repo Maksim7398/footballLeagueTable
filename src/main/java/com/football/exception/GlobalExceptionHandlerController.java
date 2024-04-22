@@ -1,5 +1,6 @@
 package com.football.exception;
 
+import com.football.controller.response.UniversalResponse;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandlerController {
 
     @ExceptionHandler
-    public ResponseEntity<ErrorDetails> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+    public ResponseEntity<UniversalResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         ErrorDetails errorDetails = new ErrorDetails(
                 exception.getClass().getSimpleName(),
                 exception.getFieldErrors()
@@ -23,18 +24,33 @@ public class GlobalExceptionHandlerController {
                         .collect(Collectors.joining("; ")),
                 LocalDateTime.now()
         );
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+        UniversalResponse universalResponse = UniversalResponse.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .errorDetails(errorDetails)
+                .payload(null)
+                .build();
+        return new ResponseEntity<>(universalResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorDetails> handleTeamNotFoundException(TeamNotFoundException exception) {
+    public ResponseEntity<UniversalResponse> handleTeamNotFoundException(TeamNotFoundException exception) {
         ErrorDetails errorDetails = new ErrorDetails(exception.getClass().getSimpleName(), exception.getMessage(), LocalDateTime.now());
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+        UniversalResponse universalResponse = UniversalResponse.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .errorDetails(errorDetails)
+                .payload(null)
+                .build();
+        return new ResponseEntity<>(universalResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorDetails> handleThisTeamAlreadyCompeted(MatchExceptions exception) {
+    public ResponseEntity<UniversalResponse> handleThisTeamAlreadyCompeted(MatchExceptions exception) {
         ErrorDetails errorDetails = new ErrorDetails(exception.getClass().getSimpleName(), exception.getMessage(), LocalDateTime.now());
-        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+        UniversalResponse universalResponse = UniversalResponse.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .errorDetails(errorDetails)
+                .payload(null)
+                .build();
+        return new ResponseEntity<>(universalResponse, HttpStatus.BAD_REQUEST);
     }
 }
