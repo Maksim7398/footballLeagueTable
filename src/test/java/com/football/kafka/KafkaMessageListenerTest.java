@@ -5,8 +5,10 @@ import com.football.kafka.producer.TestProducer;
 import com.football.model.CreateMatchRequestBuilder;
 import com.football.model.TeamEntityBuilder;
 import com.football.persist.entity.TeamEntity;
+import com.football.persist.entity.Tournament;
 import com.football.persist.repository.MatchRepository;
 import com.football.persist.repository.TeamRepository;
+import com.football.persist.repository.TournamentRepository;
 import lombok.SneakyThrows;
 import org.assertj.core.api.AssertionsForInterfaceTypes;
 import org.junit.jupiter.api.Test;
@@ -38,6 +40,9 @@ public class KafkaMessageListenerTest {
     private MatchRepository matchRepository;
 
     @Autowired
+    private TournamentRepository tournamentRepository;
+
+    @Autowired
     private TeamRepository teamRepositoryMock;
 
     @Container
@@ -64,13 +69,14 @@ public class KafkaMessageListenerTest {
                 .withName("Spartak")
                 .build();
 
+        teamRepositoryMock.saveAll(List.of(team1, team2));
         final CreateMatchRequest expected = CreateMatchRequestBuilder.aCreateMatchRequestBuilder()
-                .withHomeTeam(team1.getName())
-                .withAwayTeam(team2.getName())
+                .withHomeTeam(team1.getId())
+                .withAwayTeam(team2.getId())
                 .build();
 
-        teamRepositoryMock.saveAll(List.of(team1, team2));
 
+        tournamentRepository.save(new Tournament(1L,"Russia"));
         testProducer.sendCreateMatchResult("1", expected);
 
         await()
@@ -78,14 +84,13 @@ public class KafkaMessageListenerTest {
                 .untilAsserted(() -> {
                             AssertionsForInterfaceTypes.assertThat(matchRepository.findAll())
                                     .anySatisfy(m -> {
-                                        assertEquals(m.getHomeTeam().getName(), expected.getHomeTeam());
-                                        assertEquals(m.getAwayTeam().getName(), expected.getAwayTeam());
+                                        assertEquals(m.getHomeTeam().getId(), expected.getHomeTeam());
+                                        assertEquals(m.getAwayTeam().getId(), expected.getAwayTeam());
                                         assertEquals(m.getAwayGoals(), expected.getAwayGoals());
                                         assertEquals(m.getHomeGoals(), expected.getHomeGoals());
                                     });
                         }
 
                 );
-
     }
 }

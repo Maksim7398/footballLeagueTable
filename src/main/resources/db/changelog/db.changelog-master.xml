@@ -7,4 +7,6 @@
     <include file="/db/changelog/create-table-team.xml"/>
     <include file="/db/changelog/add-foreign-key-for-away-team.xml"/>
     <include file="/db/changelog/add-foreign-key-for-home-team.xml"/>
+    <include file="/db/changelog/create-table-tournament.xml"/>
+    <include file="/db/changelog/add-foreign-key-for-tournament.xml"/>
 </databaseChangeLog>

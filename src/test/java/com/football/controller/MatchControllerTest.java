@@ -6,8 +6,10 @@ import com.football.model.MatchEntityBuilder;
 import com.football.model.TeamEntityBuilder;
 import com.football.persist.entity.MatchEntity;
 import com.football.persist.entity.TeamEntity;
+import com.football.persist.entity.Tournament;
 import com.football.persist.repository.MatchRepository;
 import com.football.persist.repository.TeamRepository;
+import com.football.persist.repository.TournamentRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
@@ -34,6 +36,9 @@ public class MatchControllerTest {
     @Autowired
     private MatchRepository matchRepository;
 
+    @Autowired
+    private TournamentRepository tournamentRepository;
+
     @Test
     public void createMatch_returnTeamNotFoundException_test() {
         final CreateMatchRequest createMatchRequest = CreateMatchRequestBuilder.aCreateMatchRequestBuilder().build();
@@ -44,7 +49,7 @@ public class MatchControllerTest {
                 .body(createMatchRequest)
                 .post("/match")
                 .then()
-                .statusCode(404);
+                .statusCode(400);
     }
 
     @Test
@@ -55,13 +60,14 @@ public class MatchControllerTest {
                 .withId(UUID.randomUUID())
                 .withName("SQL")
                 .build();
-
+        teamRepository.saveAll(List.of(team1, team2));
         final CreateMatchRequest createMatchRequest = CreateMatchRequestBuilder.aCreateMatchRequestBuilder()
-                .withHomeTeam(team1.getName())
-                .withAwayTeam(team2.getName())
+                .withHomeTeam(team1.getId())
+                .withAwayTeam(team2.getId())
                 .build();
 
-        teamRepository.saveAll(List.of(team1, team2));
+        tournamentRepository.save(new Tournament(1L,"Russia"));
+
         RestAssured.given()
                 .baseUri("http://localhost:" + port + "/my-app")
                 .contentType(ContentType.JSON)
@@ -84,14 +90,15 @@ public class MatchControllerTest {
                 .withHomeTeam(team2).build();
 
         teamRepository.saveAll(List.of(team1, team2));
+        tournamentRepository.save(matchEntityStub.getTournament());
         matchRepository.save(matchEntityStub);
 
         RestAssured.given()
                 .baseUri("http://localhost:" + port + "/my-app")
-                .header("localDateTimeForMatches", LocalDateTime.now().plusDays(1).format(formatter))
+                .param("dateMatch", LocalDateTime.now().plusDays(1).format(formatter))
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/match")
+                .get("/match/1")
                 .then()
                 .statusCode(200);
     }

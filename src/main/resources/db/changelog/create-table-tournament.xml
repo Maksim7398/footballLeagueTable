@@ -1,0 +1,21 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="Maksim7398" id="006-create-table-tournament">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tournament"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tournament">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tournament_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="name" constraintName="tournament_name_key" tableName="tournament"/>
+    </changeSet>
+</databaseChangeLog>

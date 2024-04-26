@@ -1,6 +1,7 @@
 package com.football.controller.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.football.persist.entity.Tournament;
 import lombok.Builder;
 import lombok.Data;
 
@@ -20,4 +21,6 @@ public class GetResponseMatch {
     private Integer homeGoals;
 
     private Integer awayGoals;
+
+    private Tournament tournament;
 }

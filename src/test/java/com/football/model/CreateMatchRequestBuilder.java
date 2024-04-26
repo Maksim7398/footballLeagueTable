@@ -2,21 +2,27 @@ package com.football.model;
 
 import com.football.controller.request.CreateMatchRequest;
 
+import java.util.UUID;
+
 public class CreateMatchRequestBuilder {
 
-    private final static String DEFAULT_HOME_TEAM = "VOLGA";
+    private final static Long TOURNAMENT_ID = 1L;
 
-    private final static String DEFAULT_AWAY_TEAM = "ZENIT";
+    private final static UUID DEFAULT_HOME_TEAM = UUID.randomUUID();
+
+    private final static UUID DEFAULT_AWAY_TEAM = UUID.randomUUID();
 
     private final static Integer DEFAULT_HOME_GOALS = 2;
 
     private final static Integer DEFAULT_AWAY_GOALS = 2;
 
-    private String homeTeam = DEFAULT_HOME_TEAM;
+    private Long tournamentId = TOURNAMENT_ID;
+
+    private UUID homeTeam = DEFAULT_HOME_TEAM;
 
     private Integer homeGoals = DEFAULT_HOME_GOALS;
 
-    private String awayTeam = DEFAULT_AWAY_TEAM;
+    private UUID awayTeam = DEFAULT_AWAY_TEAM;
 
     private Integer awayGoals = DEFAULT_AWAY_GOALS;
 
@@ -28,12 +34,12 @@ public class CreateMatchRequestBuilder {
     }
 
 
-    public CreateMatchRequestBuilder withHomeTeam(String homeTeam) {
+    public CreateMatchRequestBuilder withHomeTeam(UUID homeTeam) {
         this.homeTeam = homeTeam;
         return this;
     }
 
-    public CreateMatchRequestBuilder withAwayTeam(String awayTeam) {
+    public CreateMatchRequestBuilder withAwayTeam(UUID awayTeam) {
         this.awayTeam = awayTeam;
         return this;
     }
@@ -50,6 +56,7 @@ public class CreateMatchRequestBuilder {
 
     public CreateMatchRequest build() {
         return CreateMatchRequest.builder()
+                .tournamentId(tournamentId)
                 .homeTeam(homeTeam)
                 .homeGoals(homeGoals)
                 .awayTeam(awayTeam)

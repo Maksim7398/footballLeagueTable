@@ -31,3 +31,6 @@ spring:
 app:
   kafka:
     enabled: false
+
+date:
+  format: yyyy-MM-dd HH:mm

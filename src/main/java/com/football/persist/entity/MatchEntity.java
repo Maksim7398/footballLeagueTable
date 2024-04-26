@@ -10,13 +10,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Table(name = "match")
 @Entity
 @Builder
@@ -36,7 +40,7 @@ public class MatchEntity implements Comparable<MatchEntity> {
     @JoinColumn(name = "away_team")
     private TeamEntity awayTeam;
 
-    @Column(name = "time")
+    @Column(name = "date_match")
     private LocalDateTime dateMatch;
 
     @Column(name = "home_goals")
@@ -44,6 +48,10 @@ public class MatchEntity implements Comparable<MatchEntity> {
 
     @Column(name = "away_goals")
     private Integer awayGoals;
+
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "id",name = "tournament_id")
+    private Tournament tournament;
 
     @Override
     public int compareTo(MatchEntity o) {
