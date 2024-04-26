@@ -6,6 +6,7 @@ import com.football.model.MatchEntityBuilder;
 import com.football.model.TeamEntityBuilder;
 import com.football.persist.entity.MatchEntity;
 import com.football.persist.entity.TeamEntity;
+import com.football.persist.entity.Tournament;
 import com.football.persist.repository.MatchRepository;
 import com.football.persist.repository.TeamRepository;
 import com.football.persist.repository.TournamentRepository;
@@ -65,6 +66,7 @@ public class MatchControllerTest {
                 .withAwayTeam(team2.getName())
                 .build();
 
+        tournamentRepository.save(new Tournament(1L,"Russia"));
         teamRepository.saveAll(List.of(team1, team2));
 
         RestAssured.given()
@@ -94,10 +96,10 @@ public class MatchControllerTest {
 
         RestAssured.given()
                 .baseUri("http://localhost:" + port + "/my-app")
-                .header("localDateTimeForMatches", LocalDateTime.now().plusDays(1).format(formatter))
+                .param("dateMatch", LocalDateTime.now().plusDays(1).format(formatter))
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/match/Russia")
+                .get("/match/1")
                 .then()
                 .statusCode(200);
     }

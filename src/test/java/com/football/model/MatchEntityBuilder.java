@@ -59,6 +59,11 @@ public class MatchEntityBuilder {
         return this;
     }
 
+    public MatchEntityBuilder withTournament(Tournament tournament) {
+        this.tournament = tournament;
+        return this;
+    }
+
     public MatchEntityBuilder withDateMatch(LocalDateTime dateMatch) {
         this.dateMatch = dateMatch;
         return this;

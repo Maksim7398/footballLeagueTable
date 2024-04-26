@@ -15,8 +15,8 @@ public interface TeamRepository extends JpaRepository<TeamEntity, UUID> {
     @Query(
             " from TeamEntity t " +
                     " join MatchEntity m on m.homeTeam.id = t.id or m.awayTeam.id = t.id " +
-                    " where m.tournament.name = :tournamentName ")
-    List<TeamEntity> findAllByTournamentName(String tournamentName);
+                    " where m.tournament.id = :tournamentId ")
+    List<TeamEntity> findAllByTournamentID(Long tournamentId);
 
     Optional<TeamEntity> findTeamEntityByName(String name);
 }

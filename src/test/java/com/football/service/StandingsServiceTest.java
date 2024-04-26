@@ -9,7 +9,6 @@ import com.football.persist.entity.MatchEntity;
 import com.football.persist.entity.TeamEntity;
 import com.football.persist.repository.MatchRepository;
 import com.football.persist.repository.TeamRepository;
-import com.football.persist.repository.TournamentRepository;
 import com.football.service.standings.StandingsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -79,14 +78,14 @@ public class StandingsServiceTest {
                 .withNumberOfGames(0)
                 .build();
 
-        when(teamRepositoryMock.findAllByTournamentName(any())).thenReturn(List.of(team1, team2));
+        when(teamRepositoryMock.findAllByTournamentID(any())).thenReturn(List.of(team1, team2));
         when(matchRepositoryMock.findAllByFetch()).thenReturn(List.of(matchEntity, matchEntity2));
         when(matchRepositoryMock.matchByBetweenTime(any())).thenReturn(true);
         when(teamMapperMock.convertEntityToDto(team1)).thenReturn(teamDTO);
         when(teamMapperMock.convertEntityToDto(team2)).thenReturn(teamDTO2);
 
         final Map<Integer, TeamDTO> resultTeamTable =
-                underTest.createResultTeamTable(any(),LocalDateTime.now().plusDays(2));
+                underTest.createResultTeamTable(any(),LocalDateTime.now().plusDays(2)).getTeamTable();
         final ArrayList<TeamDTO> actual = new ArrayList<>(resultTeamTable.values());
         System.out.println(actual);
         assertEquals(teamDTO, actual.get(0));
@@ -125,12 +124,12 @@ public class StandingsServiceTest {
 
         when(matchRepositoryMock.findAllByFetch()).thenReturn(List.of(matchEntity, matchEntity2));
         when(matchRepositoryMock.matchByBetweenTime(any())).thenReturn(true);
-        when(teamRepositoryMock.findAllByTournamentName(any())).thenReturn(List.of(team1, team2));
+        when(teamRepositoryMock.findAllByTournamentID(any())).thenReturn(List.of(team1, team2));
         when(teamMapperMock.convertEntityToDto(team1)).thenReturn(teamDTO);
         when(teamMapperMock.convertEntityToDto(team2)).thenReturn(teamDTO2);
 
         Map<Integer, TeamDTO> resultTeamTable =
-                underTest.createResultTeamTable("Russia",LocalDateTime.now().plusDays(2));
+                underTest.createResultTeamTable(1L,LocalDateTime.now().plusDays(2)).getTeamTable();
         ArrayList<TeamDTO> actual = new ArrayList<>(resultTeamTable.values());
         assertEquals(teamDTO, actual.get(0));
     }

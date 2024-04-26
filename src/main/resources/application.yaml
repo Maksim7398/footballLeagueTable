@@ -32,5 +32,5 @@ app:
   kafka:
     enabled: false
 
-format:
-  date: yyyy-MM-dd HH:mm
+date:
+  format: yyyy-MM-dd HH:mm

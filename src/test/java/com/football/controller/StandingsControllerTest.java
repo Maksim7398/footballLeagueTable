@@ -1,5 +1,6 @@
 package com.football.controller;
 
+import com.football.controller.date_format.DateFormat;
 import com.football.model.MatchEntityBuilder;
 import com.football.model.TeamEntityBuilder;
 import com.football.persist.entity.MatchEntity;
@@ -25,7 +26,7 @@ import java.util.List;
 public class StandingsControllerTest {
 
     @LocalServerPort
-    private int port;
+    public int port;
 
     @Autowired
     private TeamRepository teamRepository;
@@ -36,27 +37,35 @@ public class StandingsControllerTest {
     @Autowired
     private TournamentRepository tournamentRepository;
 
+    @Autowired
+    private DateFormat dateFormat;
+
     @Test
     public void getStandings_test() {
-        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        matchRepository.deleteAll();
+        teamRepository.deleteAll();
+
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat.getFormat());
         final TeamEntity team1 = TeamEntityBuilder.aTeamEntityBuilder().build();
         final TeamEntity team2 = TeamEntityBuilder.aTeamEntityBuilder()
                 .withName("Spartak")
                 .build();
         final MatchEntity matchEntityStub = MatchEntityBuilder.aMatchEntityBuilder()
                 .withAwayTeam(team1)
-                .withHomeTeam(team2).build();
+                .withHomeTeam(team2)
+                .withTournament(new Tournament(1L, "Russia"))
+                .build();
 
         teamRepository.saveAll(List.of(team1, team2));
-        tournamentRepository.save(new Tournament(1L,"Russia"));
+        tournamentRepository.save(new Tournament(1L, "Russia"));
         matchRepository.save(matchEntityStub);
 
         RestAssured.given()
                 .baseUri("http://localhost:" + port + "/my-app")
-                .header("localDateTime", LocalDateTime.now().plusDays(1).format(formatter))
+                .param("dateMatch", LocalDateTime.now().format(formatter))
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/standings/Russia")
+                .get("/standings/1")
                 .then()
                 .statusCode(200);
     }

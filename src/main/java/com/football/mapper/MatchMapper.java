@@ -31,6 +31,7 @@ public interface MatchMapper {
         matchDTO.dateMatch(matchEntity.getDateMatch());
         matchDTO.homeGoals(matchEntity.getHomeGoals());
         matchDTO.awayGoals(matchEntity.getAwayGoals());
+        matchDTO.tournament(matchEntity.getTournament());
 
         return matchDTO.build();
     }
@@ -49,6 +50,7 @@ public interface MatchMapper {
             getResponseMatch.dateMatch(LocalDate.from(matchDTO.getDateMatch()));
             getResponseMatch.homeGoals(matchDTO.getHomeGoals());
             getResponseMatch.awayGoals(matchDTO.getAwayGoals());
+            getResponseMatch.tournament(matchDTO.getTournament());
             return getResponseMatch.build();
         }
     }

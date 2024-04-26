@@ -46,8 +46,8 @@ public class MatchRepositoryTest {
 
         AssertionsForInterfaceTypes.assertThat(actual)
                         .anySatisfy(m -> {
-                            assertEquals(expected.getAwayTeam(),m.getAwayTeam());
-                            assertEquals(expected.getHomeTeam(),m.getHomeTeam());
+                            assertEquals(expected.getAwayTeam().getId(),m.getAwayTeam().getId());
+                            assertEquals(expected.getHomeTeam().getId(),m.getHomeTeam().getId());
                             assertEquals(expected.getAwayGoals(),m.getAwayGoals());
                         });
         assertFalse(actual.isEmpty());

@@ -9,8 +9,8 @@ import lombok.Data;
 @Builder
 public class CreateMatchRequest {
 
-    @NotBlank(message = "tournamentName must not be blank")
-    private String tournamentName;
+    @NotNull(message = "tournament id must not be null")
+    private Long tournamentId;
 
     @NotBlank(message = "home team must not be blank")
     private String homeTeam;

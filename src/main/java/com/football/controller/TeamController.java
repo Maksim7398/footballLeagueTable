@@ -2,7 +2,8 @@ package com.football.controller;
 
 import com.football.controller.request.CreateTeamRequest;
 import com.football.controller.response.GetTeamResponse;
-import com.football.controller.response.UniversalResponse;
+import com.football.controller.universal_response.UniversalResponse;
+import com.football.controller.universal_response.UniversalSuccessResponse;
 import com.football.mapper.TeamMapper;
 import com.football.service.teams.TeamService;
 import jakarta.validation.Valid;
@@ -24,20 +25,15 @@ public class TeamController {
     private final TeamMapper teamMapper;
 
     @PostMapping
-    public UniversalResponse createTeam(@RequestBody @Valid CreateTeamRequest createTeamRequest) {
-        return UniversalResponse.builder()
-                .status(HttpStatus.OK)
-                .payload(teamMapper.convertDtoToNewTeamResponse(teamService.createTeam(createTeamRequest)))
-                .errorDetails("")
-                .build();
+    public UniversalResponse<GetTeamResponse> createTeam(@RequestBody @Valid CreateTeamRequest createTeamRequest) {
+        return new UniversalSuccessResponse<>(HttpStatus.OK,
+                teamMapper.convertDtoToNewTeamResponse(teamService.createTeam(createTeamRequest)));
     }
 
     @GetMapping
-    public UniversalResponse getTeams() {
-        return UniversalResponse.builder()
-                .status(HttpStatus.OK)
-                .payload(GetTeamResponse.builder().teamDTOList(teamService.listTeams()))
-                .errorDetails("")
-                .build();
+    public UniversalResponse<GetTeamResponse> getTeams() {
+        return new UniversalSuccessResponse<>(HttpStatus.OK, GetTeamResponse.builder()
+                .teamDTOList(teamService.listTeams())
+                .build());
     }
 }

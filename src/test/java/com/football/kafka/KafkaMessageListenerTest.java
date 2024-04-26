@@ -5,8 +5,10 @@ import com.football.kafka.producer.TestProducer;
 import com.football.model.CreateMatchRequestBuilder;
 import com.football.model.TeamEntityBuilder;
 import com.football.persist.entity.TeamEntity;
+import com.football.persist.entity.Tournament;
 import com.football.persist.repository.MatchRepository;
 import com.football.persist.repository.TeamRepository;
+import com.football.persist.repository.TournamentRepository;
 import lombok.SneakyThrows;
 import org.assertj.core.api.AssertionsForInterfaceTypes;
 import org.junit.jupiter.api.Test;
@@ -36,6 +38,9 @@ public class KafkaMessageListenerTest {
 
     @Autowired
     private MatchRepository matchRepository;
+
+    @Autowired
+    private TournamentRepository tournamentRepository;
 
     @Autowired
     private TeamRepository teamRepositoryMock;
@@ -70,7 +75,7 @@ public class KafkaMessageListenerTest {
                 .build();
 
         teamRepositoryMock.saveAll(List.of(team1, team2));
-
+        tournamentRepository.save(new Tournament(1L,"Russia"));
         testProducer.sendCreateMatchResult("1", expected);
 
         await()

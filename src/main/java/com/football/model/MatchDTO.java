@@ -1,6 +1,7 @@
 package com.football.model;
 
 import com.football.persist.entity.TeamEntity;
+import com.football.persist.entity.Tournament;
 import lombok.Builder;
 import lombok.Data;
 
@@ -22,4 +23,7 @@ public class MatchDTO {
     private Integer homeGoals;
 
     private Integer awayGoals;
+
+    private Tournament tournament;
+
 }

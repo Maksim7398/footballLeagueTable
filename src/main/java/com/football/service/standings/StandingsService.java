@@ -1,5 +1,6 @@
 package com.football.service.standings;
 
+import com.football.controller.response.TeamTable;
 import com.football.exception.TeamNotFoundException;
 import com.football.mapper.TeamMapper;
 import com.football.model.TeamDTO;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,9 +30,9 @@ public class StandingsService {
     private final TeamMapper teamMapper;
 
     @Transactional
-    public Map<Integer, TeamDTO> createResultTeamTable(final String tournamentName, final LocalDateTime localDate) {
+    public TeamTable createResultTeamTable(final Long tournamentId, final LocalDateTime localDate) {
 
-        final List<TeamEntity> teamEntities = teamRepository.findAllByTournamentName(tournamentName);
+        final List<TeamEntity> teamEntities = teamRepository.findAllByTournamentID(tournamentId);
         final List<MatchEntity> matchEntities = matchRepository.findAllByFetch();
 
         if (teamEntities.isEmpty()) {
@@ -66,7 +66,11 @@ public class StandingsService {
 
         final List<TeamDTO> list = teamDTOS.stream().sorted(Comparator.reverseOrder()).toList();
 
-        return list.stream().collect(Collectors.toMap(t -> (list.indexOf(t) + 1), t -> t));
+        return TeamTable.builder()
+                .calculateDate(localDate.toString())
+                .tournamentName(matchEntities.stream().map(m -> m.getTournament().getName()).findFirst().get())
+                .teamTable(list.stream().collect(Collectors.toMap(t -> (list.indexOf(t) + 1), t -> t)))
+                .build();
     }
 
     private void createTableTeam(final TeamDTO homeTeam,

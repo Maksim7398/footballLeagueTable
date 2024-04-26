@@ -21,4 +21,9 @@ public interface MatchRepository extends JpaRepository<MatchEntity, UUID> {
     @Query(value = "select CAST(CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS BIT) FROM match WHERE" +
             " date_match between (select min(date_match) from match) and :localDateTime",nativeQuery = true)
     Boolean matchByBetweenTime(@Param("localDateTime") LocalDateTime localDateTime);
+
+    @Query("from MatchEntity m " +
+            "left join TeamEntity t on t.id = m.homeTeam.id or t.id = m.awayTeam.id" +
+            " where m.awayTeam.id = :teamId or m.homeTeam.id = :teamId ")
+    List<MatchEntity> findAllMatchByTeam(@Param("teamId") UUID teamId);
 }
