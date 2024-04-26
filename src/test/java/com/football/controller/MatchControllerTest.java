@@ -60,14 +60,13 @@ public class MatchControllerTest {
                 .withId(UUID.randomUUID())
                 .withName("SQL")
                 .build();
-
+        teamRepository.saveAll(List.of(team1, team2));
         final CreateMatchRequest createMatchRequest = CreateMatchRequestBuilder.aCreateMatchRequestBuilder()
-                .withHomeTeam(team1.getName())
-                .withAwayTeam(team2.getName())
+                .withHomeTeam(team1.getId())
+                .withAwayTeam(team2.getId())
                 .build();
 
         tournamentRepository.save(new Tournament(1L,"Russia"));
-        teamRepository.saveAll(List.of(team1, team2));
 
         RestAssured.given()
                 .baseUri("http://localhost:" + port + "/my-app")

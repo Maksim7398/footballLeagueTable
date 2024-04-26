@@ -53,11 +53,11 @@ public class MatchServiceTest {
                 .withName("Spartak").build();
         final Tournament tournament = new Tournament(1L, "Russia");
 
-        when(teamRepositoryMock.findTeamEntityByName(team1.getName())).thenReturn(Optional.of(team1));
-        when(teamRepositoryMock.findTeamEntityByName(team2.getName())).thenReturn(Optional.of(team2));
+        when(teamRepositoryMock.findById(team1.getId())).thenReturn(Optional.of(team1));
+        when(teamRepositoryMock.findById(team2.getId())).thenReturn(Optional.of(team2));
         when(tournamentRepositoryMock.findById(any())).thenReturn(Optional.of(tournament));
 
-        underTest.createGame(1L, team1.getName(), team2.getName(), 2, 1);
+        underTest.createGame(1L, team1.getId(), team2.getId(), 2, 1);
 
         ArgumentCaptor<MatchEntity> captor = ArgumentCaptor.forClass(MatchEntity.class);
 
@@ -90,8 +90,8 @@ public class MatchServiceTest {
                 .withDateMatch(LocalDateTime.now()).build();
 
 
-        when(teamRepositoryMock.findTeamEntityByName(team1.getName())).thenReturn(Optional.of(team1));
-        when(teamRepositoryMock.findTeamEntityByName(team2.getName())).thenReturn(Optional.of(team2));
+        when(teamRepositoryMock.findById(team1.getId())).thenReturn(Optional.of(team1));
+        when(teamRepositoryMock.findById(team2.getId())).thenReturn(Optional.of(team2));
         when(tournamentRepositoryMock.findById(any())).thenReturn(Optional.of(tournament));
         when(matchRepositoryMock.findAllByFetch()).thenReturn(List.of(expected));
 
@@ -99,8 +99,8 @@ public class MatchServiceTest {
                 () -> {
                     underTest.createGame(
                             1L,
-                            team1.getName(),
-                            team2.getName(),
+                            team1.getId(),
+                            team2.getId(),
                             2, 1);
                 }
         );

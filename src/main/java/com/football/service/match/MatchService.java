@@ -33,10 +33,10 @@ public class MatchService {
     private final TournamentRepository tournamentRepository;
 
     @Transactional
-    public MatchDTO createGame(final Long tournamentId, final String homeTeam, final String awayTeam, final Integer homeGoals, final Integer awayGoals) {
-        final TeamEntity teamEntity1 = teamRepository.findTeamEntityByName(homeTeam)
+    public MatchDTO createGame(final Long tournamentId, final UUID homeTeam, final UUID awayTeam, final Integer homeGoals, final Integer awayGoals) {
+        final TeamEntity teamEntity1 = teamRepository.findById(homeTeam)
                 .orElseThrow(() -> new TeamNotFoundException("Такой команды не существует"));
-        final TeamEntity teamEntity2 = teamRepository.findTeamEntityByName(awayTeam)
+        final TeamEntity teamEntity2 = teamRepository.findById(awayTeam)
                 .orElseThrow(() -> new TeamNotFoundException("Такой команды не существует"));
 
         final Tournament tournament = tournamentRepository.findById(tournamentId)
@@ -49,9 +49,7 @@ public class MatchService {
         });
 
         final MatchEntity matchEntity = createResultTeam(teamEntity1, teamEntity2, homeGoals, awayGoals);
-
         matchEntity.setTournament(tournament);
-
         matchRepository.save(matchEntity);
 
         return matchMapper.convertEntityToDto(matchEntity);
