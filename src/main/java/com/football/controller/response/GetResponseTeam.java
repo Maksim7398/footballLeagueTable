@@ -9,6 +9,10 @@ public class GetResponseTeam {
 
     private String name;
 
+    private String country;
+
+    private String city;
+
     private int numberOfGames;
 
     private int scipGoals;
